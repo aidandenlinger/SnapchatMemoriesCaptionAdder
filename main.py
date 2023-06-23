@@ -3,6 +3,7 @@ import logging
 from pprint import pformat
 
 from args import parse_args
+from SnapchatMemoriesMetadataAdder.adder import add_metadata
 from SnapchatMemoriesMetadataAdder.parser import parse_history
 
 
@@ -17,6 +18,7 @@ def main():
 
     for entry in parsed:
         logging.debug("\n" + pformat(entry))
+        add_metadata(args.memories_folder, entry)
 
 
 if __name__ == "__main__":
