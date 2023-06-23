@@ -26,8 +26,7 @@ def parse_args() -> Args:
     parser.add_argument("--memories-folder",
                         dest="memories_folder",
                         default=str(default_memories_folder))
-    parser.add_argument("--output",
-                        default=str(default_output_folder))
+    parser.add_argument("--output", default=str(default_output_folder))
 
     args_raw = parser.parse_args()
 
@@ -51,7 +50,6 @@ def parse_args() -> Args:
             f"{output_folder} already exists, but is set to be the output "
             "folder! Stopping the script since it may contain exported photos. "
             "Please delete this directory if you intend to use it as the "
-            "output folder."
-        )
+            "output folder.")
 
     return Args(memories_history, memories_folder, output_folder)
