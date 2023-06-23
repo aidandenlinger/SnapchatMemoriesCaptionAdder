@@ -56,9 +56,20 @@ and captions.
 
 ## Contributing
 
-There's more metadata in the `memories_history.json` file that isn't being added
-to the files (namely location), I'm more than open to accepting contributions to
-add those.
+This achieved what I needed it to do, so I don't anticipate adding many more
+features. I'd be happy to accept PRs for some feaures I didn't implement:
+
+- Inserting location metadata into the final photos. The locations are parsed,
+  they just aren't added to the photos.
+- Snapchat uses UTC as the timezone for the timestamps. This script takes a
+  guess that your computer's local time zone is the timezone you want the
+  timestamps in. Allowing the user to specify a timezone, or automatically
+  determine the timezone from the photo's location data, would be an
+  improvement.
+- I believe [ffmpeg could also do photos, but it's less efficient than
+  VIPS](https://stackoverflow.com/questions/70966770/ffmpeg-or-imagemagick-for-image-conversion-and-resizing-speed-memory-usage).
+  Adding a fallback to ffmpeg would make installation easier for those who
+  can't easily install VIPS.
 
 ## License
 MIT
