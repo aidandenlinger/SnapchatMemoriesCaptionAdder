@@ -10,10 +10,10 @@ metadata and the captions are stored separately!
 
 ![A series of pictures with useless names](doc/before.png)
 
-You may then go to an alternate project like [ToTheMax's Snapchat-All-Memories-
-Downloader](https://github.com/ToTheMax/Snapchat-All-Memories-Downloader), which
-is fantastic and will download all memories and add the timestamp, but now there
-are no captions on the images at all!
+You may then go to an alternate project like [ToTheMax's
+Snapchat-All-Memories-Downloader](https://github.com/ToTheMax/Snapchat-All-Memories-Downloader),
+which is fantastic and will download all memories and add the timestamp, but now
+there are no captions on the images at all!
 
 This project serves as a bridge between these two methods! We have all the
 metadata and we have all the memory photos/videos and captions, we just need to
@@ -43,8 +43,8 @@ First, we need to get our data.
   zip files, merge all the `memories` folders into one `memories` folder. This
   is the only folder you need.
 - Next, request your data again, but *do not* include your memories. This
-  should be much quicker :) In this data export, make sure you have a `json/
-  memories_history.json`. This is the metadata for the memories.
+  should be much quicker :) In this data export, make sure you have a
+  `json/memories_history.json`. This is the metadata for the memories.
 
 Now, make a folder in this repo called `input` and put the `memories` folder
 from the first export and the `memories_history.json` file from the second
