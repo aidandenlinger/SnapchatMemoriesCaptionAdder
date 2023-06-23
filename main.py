@@ -7,9 +7,10 @@ from SnapchatMemoriesMetadataAdder.parser import parse_history
 
 
 def main():
-    args = parse_args()
     # TODO: reduce logging level when done!
     logging.basicConfig(level=logging.DEBUG)
+    args = parse_args()
+    logging.debug(args)
     
     with args.memories_history.open() as metadata:
         parsed = parse_history(json.load(metadata)["Saved Media"])
