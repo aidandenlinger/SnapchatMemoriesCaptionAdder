@@ -15,7 +15,7 @@ def main():
     with args.memories_history.open() as metadata:
         parsed = parse_history(json.load(metadata)["Saved Media"])
 
-    for entry in parsed.items():
+    for entry in parsed:
         logging.debug("\n" + pformat(entry))
 
 

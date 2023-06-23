@@ -25,3 +25,4 @@ class Metadata:
     date: datetime
     type: MediaType
     location: Location
+    mid: MID
