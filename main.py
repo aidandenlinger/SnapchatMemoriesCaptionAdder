@@ -12,13 +12,14 @@ def main():
     logging.basicConfig(level=logging.DEBUG)
     args = parse_args()
     logging.debug(args)
+    args.output_folder.mkdir()
 
     with args.memories_history.open() as metadata:
         parsed = parse_history(json.load(metadata)["Saved Media"])
 
     for entry in parsed:
         logging.debug("\n" + pformat(entry))
-        add_metadata(args.memories_folder, entry)
+        add_metadata(args.memories_folder, args.output_folder, entry)
 
 
 if __name__ == "__main__":

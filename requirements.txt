@@ -1,1 +1,2 @@
 python-dateutil >= 2.8.2
+pyvips >= 2.2.1
