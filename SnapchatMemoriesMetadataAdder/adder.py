@@ -2,11 +2,11 @@ import logging
 from datetime import tzinfo
 from os import utime
 from pathlib import Path
-from shutil import copy
 
 from dateutil.tz import tzlocal
-from pyvips import Image
 
+from SnapchatMemoriesMetadataAdder._ffmpeg import ffmpeg_add_metadata
+from SnapchatMemoriesMetadataAdder._vips import vips_add_metadata
 from SnapchatMemoriesMetadataAdder.metadata import MediaType, Metadata
 
 
@@ -55,22 +55,11 @@ def add_metadata(memory_folder: Path,
     assert not output.exists()
 
     # Merge if there's an overlay!
-    if overlay:
-        match metadata.type:
-            case MediaType.Image:
-                base_img = Image.new_from_file(str(base))
-                overlay_img = Image.new_from_file(str(overlay))
-                merged = base_img.composite(overlay_img, "atop")
-                # TODO: write exif metadata for this, not just file modification!
-                merged.write_to_file(str(output))
-            case _:
-                pass
-    else:
-        # We don't add an overlay, just copy the image over with the new name
-        # TODO: Except that we want to add to the exif/video metadata :(
-        # Will need to do that here
-        copy(base, output)
+    match metadata.type:
+        case MediaType.Image:
+            vips_add_metadata(base, overlay, metadata, output)
+        case MediaType.Video:
+            ffmpeg_add_metadata(base, overlay, metadata, output)
 
     # Set the file creation/modification time to the original time!
-    if output.exists():  # TODO: remove this when I handle overlays on videos
-        utime(output, times=(local_time.timestamp(), local_time.timestamp()))
+    utime(output, times=(local_time.timestamp(), local_time.timestamp()))
