@@ -1,8 +1,10 @@
 import json
 import logging
+from functools import partial
 from pprint import pformat
 
 from tqdm import tqdm
+from tqdm.contrib.concurrent import process_map
 
 from args import parse_args
 from SnapchatMemoriesMetadataAdder.adder import add_metadata
@@ -20,10 +22,10 @@ def main():
     with args.memories_history.open() as metadata:
         parsed = parse_history(json.load(metadata)["Saved Media"])
 
-    for entry in tqdm([img for img in parsed
-                       if img.type == MediaType.Image][:20]):
-        logging.debug("\n" + pformat(entry))
-        add_metadata(args.memories_folder, args.output_folder, entry)
+    # Parse all the images in parallel
+    process_map(
+        partial(add_metadata, args.memories_folder, args.output_folder),
+        [img for img in parsed if img.type == MediaType.Image][:20])
 
     for entry in tqdm([vid for vid in parsed
                        if vid.type == MediaType.Video][:20]):
