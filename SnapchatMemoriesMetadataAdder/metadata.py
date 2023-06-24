@@ -29,4 +29,5 @@ class Metadata:
 
 
 def make_local_metadata(m: Metadata, tz: tzinfo) -> Metadata:
+    """Convert metadata to the given time zone."""
     return Metadata(m.date.astimezone(tz), m.type, m.location, m.mid)

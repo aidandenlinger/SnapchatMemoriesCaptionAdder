@@ -7,7 +7,11 @@ from dateutil.tz import tzlocal
 
 from SnapchatMemoriesMetadataAdder._ffmpeg import ffmpeg_add_metadata
 from SnapchatMemoriesMetadataAdder._vips import vips_add_metadata
-from SnapchatMemoriesMetadataAdder.metadata import MediaType, Metadata, make_local_metadata
+from SnapchatMemoriesMetadataAdder.metadata import (
+    MediaType,
+    Metadata,
+    make_local_metadata,
+)
 
 
 def _add_suffix(type: MediaType, path: Path) -> Path:
@@ -41,10 +45,7 @@ def add_metadata(memory_folder: Path,
         root.with_name(root.name +
                        "-overlay").with_suffix(".png")).exists() else None
 
-    if overlay:
-        logging.debug(f"overlay found: {overlay}")
-    else:
-        logging.debug("No overlay for this image!")
+    logging.debug(f"Overlay: {overlay}")
 
     # Update to local timezone
     metadata = make_local_metadata(metadata, tz)
@@ -55,12 +56,12 @@ def add_metadata(memory_folder: Path,
     logging.debug(f"output file: {output}")
     assert not output.exists()
 
-    # Merge if there's an overlay!
+    # Delegate to libraries to add metadata to the output file
     match metadata.type:
         case MediaType.Image:
             vips_add_metadata(base, overlay, metadata, output)
         case MediaType.Video:
             ffmpeg_add_metadata(base, overlay, metadata, output)
 
-    # Set the file creation/modification time to the original time!
+    # Set file creation time to memory's original creation time!
     utime(output, times=(metadata.date.timestamp(), metadata.date.timestamp()))
