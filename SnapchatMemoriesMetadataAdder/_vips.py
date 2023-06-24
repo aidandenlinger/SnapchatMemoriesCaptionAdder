@@ -1,6 +1,5 @@
 from datetime import tzinfo
 from pathlib import Path
-from shutil import copy
 from typing import Optional
 
 from pyvips import GValue, Image
@@ -15,18 +14,15 @@ def vips_add_metadata(base: Path, overlay: Optional[Path], metadata: Metadata,
     NOTE: Only works on images, does not work on video!"""
     assert metadata.type == MediaType.Image
 
+    img = Image.new_from_file(str(base))
+
     if overlay:
-        base_img = Image.new_from_file(str(base))
         overlay_img = Image.new_from_file(str(overlay))
         # Scale the overlay to the dimensions of the base image
-        scaled_overlay = overlay_img.resize(base_img.height /
-                                            overlay_img.height)
-        merged = base_img.composite(scaled_overlay, "atop")
-        # Add DateTimeOriginal to the image
-        merged.set_type(
-            GValue.gstr_type, "exif-ifd2-DateTimeOriginal",
-            metadata.date.astimezone(tz).strftime("%Y:%m:%d %H:%M:%S"))
-        merged.write_to_file(str(output))
-    else:
-        # TODO: exif metadata here too? probably put everything through vips
-        copy(base, output)
+        scaled_overlay = overlay_img.resize(img.height / overlay_img.height)
+        img = img.composite(scaled_overlay, "atop")
+
+    # Add DateTimeOriginal to the image
+    img.set_type(GValue.gstr_type, "exif-ifd2-DateTimeOriginal",
+                 metadata.date.astimezone(tz).strftime("%Y:%m:%d %H:%M:%S"))
+    img.write_to_file(str(output))
