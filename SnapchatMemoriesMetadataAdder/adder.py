@@ -57,7 +57,7 @@ def add_metadata(memory_folder: Path,
     # Merge if there's an overlay!
     match metadata.type:
         case MediaType.Image:
-            vips_add_metadata(base, overlay, metadata, output)
+            vips_add_metadata(base, overlay, metadata, tz, output)
         case MediaType.Video:
             ffmpeg_add_metadata(base, overlay, metadata, output)
 
