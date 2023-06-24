@@ -59,7 +59,7 @@ def add_metadata(memory_folder: Path,
         case MediaType.Image:
             vips_add_metadata(base, overlay, metadata, tz, output)
         case MediaType.Video:
-            ffmpeg_add_metadata(base, overlay, metadata, output)
+            ffmpeg_add_metadata(base, overlay, metadata, tz, output)
 
     # Set the file creation/modification time to the original time!
     utime(output, times=(local_time.timestamp(), local_time.timestamp()))
