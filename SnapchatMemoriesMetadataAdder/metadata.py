@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, tzinfo
 from enum import StrEnum, auto
 from typing import NamedTuple
 
@@ -26,3 +26,7 @@ class Metadata:
     type: MediaType
     location: Location
     mid: MID
+
+
+def make_local_metadata(m: Metadata, tz: tzinfo) -> Metadata:
+    return Metadata(m.date.astimezone(tz), m.type, m.location, m.mid)

@@ -1,4 +1,3 @@
-from datetime import tzinfo
 from pathlib import Path
 from typing import Optional
 
@@ -8,7 +7,7 @@ from SnapchatMemoriesMetadataAdder.metadata import MediaType, Metadata
 
 
 def vips_add_metadata(base: Path, overlay: Optional[Path], metadata: Metadata,
-                      tz: tzinfo, output: Path):
+                      output: Path):
     """Use the VIPS image library to add metadata to an image.
     
     NOTE: Only works on images, does not work on video!"""
@@ -29,5 +28,5 @@ def vips_add_metadata(base: Path, overlay: Optional[Path], metadata: Metadata,
     # tags it had with get_fields(). I have no idea how I would have discovered
     # this tag name otherwise
     img.set_type(GValue.gstr_type, "exif-ifd2-DateTimeOriginal",
-                 metadata.date.astimezone(tz).strftime("%Y:%m:%d %H:%M:%S"))
+                 metadata.date.strftime("%Y:%m:%d %H:%M:%S"))
     img.write_to_file(str(output))
