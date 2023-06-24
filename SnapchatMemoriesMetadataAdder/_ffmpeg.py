@@ -24,6 +24,6 @@ def ffmpeg_add_metadata(base: Path, overlay: Optional[Path],
         # Overlay the overlay and save it to output!
         final_cmd = scaled[1].overlay(scaled[0]).output(str(output))
         logging.debug(final_cmd.compile())
-        final_cmd.run()
+        final_cmd.run(quiet=True)
     else:
         copy(base, output)
