@@ -23,12 +23,12 @@ def ffmpeg_add_metadata(base: Path, overlay: Optional[Path],
         overlay_img = ffmpeg.input(str(overlay))
         # Use scale2ref to scale the overlay to the video
         scaled = ffmpeg.filter_multi_output([overlay_img, vid], "scale2ref")
-        # Overlay the overlay and save it to output!
+        # Overlay the overlay onto the video!
         overlay_video = scaled[1].overlay(scaled[0])
         cmd = ffmpeg.output(
             overlay_video,  # video
             vid.audio,  # audio
-            str(output),  # output
+            str(output),  # output file
             metadata=creation_time)
     else:
         cmd = vid.output(str(output), codec="copy", metadata=creation_time)
