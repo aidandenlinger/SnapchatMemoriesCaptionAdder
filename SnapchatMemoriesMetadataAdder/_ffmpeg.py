@@ -1,6 +1,9 @@
+import logging
 from pathlib import Path
 from shutil import copy
 from typing import Optional
+
+import ffmpeg
 
 from SnapchatMemoriesMetadataAdder.metadata import MediaType, Metadata
 
@@ -12,4 +15,15 @@ def ffmpeg_add_metadata(base: Path, overlay: Optional[Path],
     NOTE: Only works on videos, does not work on images!"""
     assert metadata.type == MediaType.Video
 
-    copy(base, output)
+    if overlay:
+        base_vid = ffmpeg.input(str(base))
+        overlay_img = ffmpeg.input(str(overlay))
+        # Use scale2ref to scale the overlay to the video
+        scaled = ffmpeg.filter_multi_output([overlay_img, base_vid],
+                                                  "scale2ref")
+        # Overlay the overlay and save it to output!
+        final_cmd = scaled[1].overlay(scaled[0]).output(str(output))
+        logging.debug(final_cmd.compile())
+        final_cmd.run()
+    else:
+        copy(base, output)
