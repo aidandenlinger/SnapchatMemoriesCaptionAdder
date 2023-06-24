@@ -17,8 +17,11 @@ def vips_add_metadata(base: Path, overlay: Optional[Path], metadata: Metadata,
     if overlay:
         base_img = Image.new_from_file(str(base))
         overlay_img = Image.new_from_file(str(overlay))
-        merged = base_img.composite(overlay_img, "atop")
+        # Scale the overlay to the dimensions of the base image
+        scaled_overlay = overlay_img.resize(base_img.height / overlay_img.height)
+        merged = base_img.composite(scaled_overlay, "atop")
         # TODO: write exif metadata for this, not just file modification!
         merged.write_to_file(str(output))
     else:
+        # TODO: exif metadata here too? probably put everything through vips
         copy(base, output)
