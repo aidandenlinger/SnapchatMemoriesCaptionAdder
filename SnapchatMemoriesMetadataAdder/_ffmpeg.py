@@ -1,4 +1,3 @@
-import logging
 from pathlib import Path
 from subprocess import Popen
 from typing import Optional
@@ -9,7 +8,7 @@ from SnapchatMemoriesMetadataAdder.metadata import MediaType, Metadata
 
 
 def ffmpeg_add_metadata(base: Path, overlay: Optional[Path],
-                        metadata: Metadata, output: Path) -> Popen:
+                        metadata: Metadata, output: Path) -> Optional[Popen]:
     """Use ffmpeg to add metadata to a video. Returns a Popen to the
     process running ffmpeg.
     
@@ -25,14 +24,15 @@ def ffmpeg_add_metadata(base: Path, overlay: Optional[Path],
         scaled = ffmpeg.filter_multi_output([overlay_img, vid], "scale2ref")
         # Overlay the overlay onto the video!
         overlay_video = scaled[1].overlay(scaled[0])
-        cmd = ffmpeg.output(
+        process = ffmpeg.output(
             overlay_video,  # video
             vid.audio,  # audio
             str(output),  # output file
-            metadata=creation_time)
+            metadata=creation_time).run_async(quiet=True)
+        return process
     else:
-        cmd = vid.output(str(output), codec="copy", metadata=creation_time)
-
-    logging.debug(cmd.compile())
-    process = cmd.run_async(quiet=True)
-    return process
+        # Don't run async! We just copy the video/audio over, it's very quick.
+        # Async on the large ones
+        cmd = vid.output(str(output), codec="copy",
+                         metadata=creation_time).run(quiet=True)
+        return None

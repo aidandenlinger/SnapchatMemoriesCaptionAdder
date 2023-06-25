@@ -1,7 +1,8 @@
 import json
 import logging
 from functools import partial
-from math import ceil
+from multiprocessing import num_of_cpus
+from time import sleep
 
 from tqdm import tqdm
 from tqdm.contrib.concurrent import process_map
@@ -32,7 +33,7 @@ def main():
     print("Handling images...")
     images = process_map(
         partial(add_metadata, args.memories_folder, args.output_folder),
-        (img for img in parsed if img.type == MediaType.Image))
+        [img for img in parsed if img.type == MediaType.Image])
 
     # This is the only reason I return the metadata, so I can do the
     # process_map and still keep track of the metadata... This is a lazy bad
@@ -42,25 +43,26 @@ def main():
 
     processes = []
 
-    videos = [vid for vid in parsed if vid.type == MediaType.Video]
-    print(
-        f"Handling {len(videos)} videos in groups of 8 (so {ceil(len(videos) / 8)} groups) "
-        "(this will be slower than the pictures and the bars are less accurate :()"
-    )
-    for metadata in videos:
+    print("Handling videos... "
+          "(this will be slower than the pictures and will have hitches!)")
+    for metadata in tqdm(
+        [vid for vid in parsed if vid.type == MediaType.Video]):
         (path, metadata, process) = add_metadata(args.memories_folder,
                                                  args.output_folder, metadata)
         files.append((path, metadata))
-        processes.append(process)
+        if process:
+            processes.append(process)
 
-        # Arbitrarily stop at 8 to prevent crashing
-        if len(processes) == 8:
-            # This isn't accurate, because the processes won't finish in order. However,
-            # lazy. Wish python-ffmpeg was asyncio instead of using processes :/
-            for process in tqdm(processes):
-                process.wait()
-            processes = []
+        # Stop processing at 7 to prevent crashing, wait for any of them to be
+        # done then keep going
+        # Yes, we're busy waiting, but I'm lazy
+        if len(processes) == num_of_cpus - 1:
+            while len([p for p in processes if p.poll() is not None]) == 0:
+                sleep(1)
+            processes = [p for p in processes if p.poll() is None]
 
+    # Wait on the final processes
+    print("Waiting for final videos...")
     for process in tqdm(processes):
         process.wait()
 
