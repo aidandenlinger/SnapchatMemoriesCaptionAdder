@@ -1,6 +1,7 @@
 import json
 import logging
 from functools import partial
+from math import ceil
 
 from tqdm import tqdm
 from tqdm.contrib.concurrent import process_map
@@ -41,15 +42,25 @@ def main():
 
     processes = []
 
-    print("Handling videos... (slower and bar is less accurate :()")
-    for metadata in [vid for vid in parsed if vid.type == MediaType.Video]:
+    videos = [vid for vid in parsed if vid.type == MediaType.Video]
+    print(
+        f"Handling {len(videos)} videos in groups of 8 (so {ceil(len(videos) / 8)} groups) "
+        "(this will be slower than the pictures and the bars are less accurate :()"
+    )
+    for metadata in videos:
         (path, metadata, process) = add_metadata(args.memories_folder,
                                                  args.output_folder, metadata)
         files.append((path, metadata))
         processes.append(process)
 
-    # This isn't accurate, because the processes won't finish in order. However,
-    # lazy. Wish python-ffmpeg was asyncio instead of using processes :/
+        # Arbitrarily stop at 8 to prevent crashing
+        if len(processes) == 8:
+            # This isn't accurate, because the processes won't finish in order. However,
+            # lazy. Wish python-ffmpeg was asyncio instead of using processes :/
+            for process in tqdm(processes):
+                process.wait()
+            processes = []
+
     for process in tqdm(processes):
         process.wait()
 
