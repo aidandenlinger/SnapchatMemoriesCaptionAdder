@@ -2,6 +2,8 @@ import logging
 from datetime import tzinfo
 from os import utime
 from pathlib import Path
+from subprocess import Popen
+from typing import Optional
 
 from dateutil.tz import tzlocal
 
@@ -23,13 +25,19 @@ def _add_suffix(type: MediaType, path: Path) -> Path:
             return path.with_suffix(".mp4")
 
 
-def add_metadata(memory_folder: Path,
-                 output_folder: Path,
-                 metadata: Metadata,
-                 tz: tzinfo = tzlocal()):
+def add_metadata(
+    memory_folder: Path,
+    output_folder: Path,
+    metadata: Metadata,
+    tz: tzinfo = tzlocal()
+) -> tuple[Path, Metadata, Optional[Popen]]:
     """Given an input/output folder, the metadata for the memory, and
     optionally a timezone, add the overlay and timezone to the memory and write
-    the file to the output folder."""
+    the file to the output folder.
+    
+    Returns the created file, the handed in metadata because I'm too lazy to do
+    this right, and if this was a video, the process running ffmpeg because
+    ffmpeg-python's async implementation is not asyncio"""
 
     # First, get/validate paths, then prepare for merging
     root = memory_folder / metadata.mid
@@ -60,8 +68,17 @@ def add_metadata(memory_folder: Path,
     match metadata.type:
         case MediaType.Image:
             vips_add_metadata(base, overlay, metadata, output)
+            process = None
         case MediaType.Video:
-            ffmpeg_add_metadata(base, overlay, metadata, output)
+            process = ffmpeg_add_metadata(base, overlay, metadata, output)
+
+    # sorry :(
+    return (output, metadata, process)
+
+
+def add_file_creation(output: Path, metadata: Metadata):
+    """Change file created date to the original photo's date."""
+    assert output.exists()
 
     # Set file creation time to memory's original creation time!
     utime(output, times=(metadata.date.timestamp(), metadata.date.timestamp()))

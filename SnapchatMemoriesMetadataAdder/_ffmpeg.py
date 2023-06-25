@@ -1,5 +1,6 @@
 import logging
 from pathlib import Path
+from subprocess import Popen
 from typing import Optional
 
 import ffmpeg
@@ -8,8 +9,9 @@ from SnapchatMemoriesMetadataAdder.metadata import MediaType, Metadata
 
 
 def ffmpeg_add_metadata(base: Path, overlay: Optional[Path],
-                        metadata: Metadata, output: Path):
-    """Use ffmpeg to add metadata to a video.
+                        metadata: Metadata, output: Path) -> Popen:
+    """Use ffmpeg to add metadata to a video. Returns a Popen to the
+    process running ffmpeg.
     
     NOTE: Only works on videos, does not work on images!"""
     assert metadata.type == MediaType.Video
@@ -32,4 +34,5 @@ def ffmpeg_add_metadata(base: Path, overlay: Optional[Path],
         cmd = vid.output(str(output), codec="copy", metadata=creation_time)
 
     logging.debug(cmd.compile())
-    cmd.run(quiet=True)
+    process = cmd.run_async(quiet=True)
+    return process
