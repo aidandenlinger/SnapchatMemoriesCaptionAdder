@@ -91,6 +91,11 @@ timestamps and captions. (Note: this will create a new copy of each photo/video,
 so make sure you have enough space!) Alternatively, use the `--output` flag to
 provide a different location to dump the photos.
 
+Note: The timezone applied to the photos is set by your computer's local
+timezone! I'm open to any PRs to improve this (see below), but for a quick
+hack you can set the default timezone in SnapchatMemoriesMetadataAdder/adder.py
+in the `add_metadata` signature.
+
 ## Contributing
 
 This achieved what I needed it to do, so I don't anticipate adding many more
