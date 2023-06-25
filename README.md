@@ -1,6 +1,6 @@
 # SnapchatMemoriesMetadataAdder
 
-![Overview](doc/overview.svg)
+![Overview](doc/overview.webp)
 
 Adds metadata (captions and timestamps) to your exported Snapchat memories.
 
