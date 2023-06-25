@@ -1,7 +1,7 @@
 import json
 import logging
 from functools import partial
-from multiprocessing import num_of_cpus
+from multiprocessing import cpu_count
 from time import sleep
 
 from tqdm import tqdm
@@ -42,6 +42,7 @@ def main():
         files.append((path, metadata))
 
     processes = []
+    num_of_cpus = cpu_count()
 
     print("Handling videos... "
           "(this will be slower than the pictures and will have hitches!)")
