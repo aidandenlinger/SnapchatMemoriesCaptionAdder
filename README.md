@@ -91,6 +91,14 @@ timestamps and captions. (Note: this will create a new copy of each photo/video,
 so make sure you have enough space!) Alternatively, use the `--output` flag to
 provide a different location to dump the photos.
 
+> **Warning**
+> If your captions are important to you, double check the final result against
+> the photos in the Snapchat app! I found that the memories export did not
+> include overlays/captions from some of my photos in 2017-2018. So check the
+> final photos to make sure captions are there. If they aren't, you may need
+> to download those impacted photos/videos directly from the Snapchat app.
+> The majority of photos were successfully exported with all their captions.
+
 Note: The timezone applied to the photos is set by your computer's local
 timezone! I'm open to any PRs to improve this (see below), but for a quick
 hack you can set the default timezone in SnapchatMemoriesMetadataAdder/adder.py
