@@ -56,8 +56,9 @@ This project relies on two major libraries.
   images. If you're on Linux, download it from your package manager, if you're
   on macOS install it from [brew](https://formulae.brew.sh/formula/vips), and if
   you're on Windows [download a compiled version
-  here](https://www.libvips.org/install.html) and [add it to your
-  path](https://stackoverflow.com/questions/44272416/how-to-add-a-folder-to-path-environment-variable-in-windows-10-with-screensho).
+  here](https://www.libvips.org/install.html#installing-the-windows-binary) and
+  [add the bin folder to your
+  path](https://stackoverflow.com/q/44272416).
 
 Finally, this project requires [Python](https://www.python.org/) to be installed
 on your computer. Once installed, you can clone this repo and run
