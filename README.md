@@ -44,14 +44,20 @@ This project relies on two major libraries.
 
 - [ffmpeg](https://ffmpeg.org/) is "a complete, cross-platform solution to
   record, convert and stream audio and video." This project uses it to overlay
-  the captions onto videos. Download it from your package manager if you're on
-  Linux or [download a compiled version here](https://ffmpeg.org/download.html).
+  the captions onto videos. If you're on Linux, download it from your package
+  manager, if you're on MacOS, install it from
+  [brew](https://formulae.brew.sh/formula/ffmpeg), and if you're on Windows,
+  install it from
+  [winget](https://learn.microsoft.com/en-us/windows/package-manager/winget/)
+  (package [here](https://winget.run/pkg/Gyan/FFmpeg)).
 - [libvips](https://www.libvips.org/) is "a demand-driven, horizontally threaded
   image processing library. Compared to similar libraries, libvips runs quickly
   and uses little memory." This project uses it to overlay the captions onto
-  images. Download it from your package manager if you're on Linux or [download
-  a compiled version here and add it to your
-  path](https://www.libvips.org/install.html).
+  images. If you're on Linux, download it from your package manager, if you're
+  on macOS install it from [brew](https://formulae.brew.sh/formula/vips), and if
+  you're on Windows [download a compiled version
+  here](https://www.libvips.org/install.html) and [add it to your
+  path](https://stackoverflow.com/questions/44272416/how-to-add-a-folder-to-path-environment-variable-in-windows-10-with-screensho).
 
 Finally, this project requires [Python](https://www.python.org/) to be installed
 on your computer. Once installed, you can clone this repo and run
@@ -82,8 +88,9 @@ from the first export and the `memories_history.json` file from the second
 export into it.
   - Alternatively, you can provide the location of the `memories_history.json`
 file with the `--memories-history` flag and the memories folder with the
-`memories` flag, for example `python main.py --memories-history test/
-memories_history.json --memories-folder test/memories --output test_output`.
+`memories` flag, for example `python main.py --memories-history
+test/memories_history.json --memories-folder test/memories --output
+test_output`.
 
 With this folder prepared, you can now run `python main.py` to run the script!
 It will create a new folder called `output` that will hold all memories with
