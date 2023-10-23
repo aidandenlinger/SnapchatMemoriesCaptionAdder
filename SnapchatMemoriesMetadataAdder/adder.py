@@ -30,7 +30,7 @@ def add_metadata(
     output_folder: Path,
     metadata: Metadata,
     tz: tzinfo = tzlocal()
-) -> tuple[Path, Metadata, Optional[Popen]]:
+) -> Optional[tuple[Path, Metadata, Optional[Popen]]]:
     """Given an input/output folder, the metadata for the memory, and
     optionally a timezone, add the overlay and timezone to the memory and write
     the file to the output folder.
@@ -45,7 +45,9 @@ def add_metadata(
     base = _add_suffix(metadata.type, root.with_name(root.name + "-main"))
 
     logging.debug(f"base image found: {base}")
-    assert base.exists()
+    if not base.exists():
+        logging.warning(f"base image {base} does not exist!")
+        return None
 
     # Note: all overlays are pngs
     overlay = overlay if (

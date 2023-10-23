@@ -31,9 +31,12 @@ def main():
 
     # Parse all the images in parallel
     print("Handling images...")
-    images = process_map(
-        partial(add_metadata, args.memories_folder, args.output_folder),
-        [img for img in parsed if img.type == MediaType.Image])
+    images = [
+        res for res in process_map(
+            partial(add_metadata, args.memories_folder, args.output_folder),
+            [img for img in parsed if img.type == MediaType.Image])
+        if res is not None
+    ]
 
     # This is the only reason I return the metadata, so I can do the
     # process_map and still keep track of the metadata... This is a lazy bad
@@ -48,11 +51,13 @@ def main():
           "(this will be slower than the pictures and will have hitches!)")
     for metadata in tqdm(
         [vid for vid in parsed if vid.type == MediaType.Video]):
-        (path, metadata, process) = add_metadata(args.memories_folder,
-                                                 args.output_folder, metadata)
-        files.append((path, metadata))
-        if process:
-            processes.append(process)
+        res = add_metadata(args.memories_folder, args.output_folder, metadata)
+        if res is not None:
+            (path, metadata, process) = res
+
+            files.append((path, metadata))
+            if process:
+                processes.append(process)
 
         # Stop processing at 7 to prevent crashing, wait for any of them to be
         # done then keep going
