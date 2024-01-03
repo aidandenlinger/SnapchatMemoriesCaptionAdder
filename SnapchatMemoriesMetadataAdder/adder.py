@@ -47,7 +47,15 @@ def add_metadata(
 
     base = _add_suffix(metadata.type, root.with_name(root.name + "-main"))
 
-    logger.debug(f"base image found: {base}")
+    if not base.exists():
+        # From github issue #3, snapchat adds the date before the mid.
+        # We have the date, we can reconstruct this name.
+        base = _add_suffix(
+            metadata.type,
+            root.with_name(metadata.date.strftime("%Y-%m-%d_") + root.name + "-main"),
+        )
+
+    logger.debug(f"base image name found: {base}")
     if not base.exists():
         logger.warning(f"base image {base} does not exist!")
         return None
