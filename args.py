@@ -5,6 +5,7 @@ from typing import NamedTuple
 
 class Args(NamedTuple):
     """A class to specifically name the arguments."""
+
     memories_history: Path
     memories_folder: Path
     output_folder: Path
@@ -21,18 +22,23 @@ def parse_args() -> Args:
         description=
         "Adds metadata (captions and timestamps) to your exported Snapchat "
         "memories.")
-    parser.add_argument("--memories-history",
-                        dest="memories_history",
-                        default=str(default_memories_history))
-    parser.add_argument("--memories-folder",
-                        dest="memories_folder",
-                        default=str(default_memories_folder))
+    parser.add_argument(
+        "--memories-history",
+        dest="memories_history",
+        default=str(default_memories_history),
+    )
+    parser.add_argument(
+        "--memories-folder",
+        dest="memories_folder",
+        default=str(default_memories_folder),
+    )
     parser.add_argument("--output", default=str(default_output_folder))
     parser.add_argument(
         "--verbose",
         "-v",
-        action='store_true',  # So if this flag is present, it will save as True
-        help="Output what the script is doing to help debug any issues")
+        action="store_true",  # So if this flag is present, it will save as True
+        help="Output what the script is doing to help debug any issues",
+    )
 
     args_raw = parser.parse_args()
 

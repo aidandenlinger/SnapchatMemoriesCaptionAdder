@@ -45,14 +45,14 @@ def main():
     images = [
         res for res in process_map(
             partial(add_metadata, args.memories_folder, args.output_folder),
-            [img for img in parsed if img.type == MediaType.Image])
-        if res is not None
+            [img for img in parsed if img.type == MediaType.Image],
+        ) if res is not None
     ]
 
     # This is the only reason I return the metadata, so I can do the
     # process_map and still keep track of the metadata... This is a lazy bad
     # solution :(
-    for (path, metadata, _) in images:
+    for path, metadata, _ in images:
         files.append((path, metadata))
 
     processes = []
@@ -87,7 +87,7 @@ def main():
     # We used to do this in add_metadata! But since ffmpeg runs async now, the
     # file won't exist until ffmpeg is done, so we have to wait until the end
     # and make main ugly :)
-    for (path, metadata) in files:
+    for path, metadata in files:
         add_file_creation(path, metadata)
 
     print("Done!")

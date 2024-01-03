@@ -36,7 +36,7 @@ def add_metadata(
     """Given an input/output folder, the metadata for the memory, and
     optionally a timezone, add the overlay and timezone to the memory and write
     the file to the output folder.
-    
+
     Returns the created file, the handed in metadata because I'm too lazy to do
     this right, and if this was a video, the process running ffmpeg because
     ffmpeg-python's async implementation is not asyncio"""
@@ -52,10 +52,11 @@ def add_metadata(
         return None
 
     # Note: all overlays are pngs
-    overlay = overlay if (
-        overlay :=
-        root.with_name(root.name +
-                       "-overlay").with_suffix(".png")).exists() else None
+    overlay = (overlay if
+               (overlay :=
+                root.with_name(root.name +
+                               "-overlay").with_suffix(".png")).exists() else
+               None)
 
     logger.debug(f"Overlay: {overlay}")
 
@@ -63,8 +64,10 @@ def add_metadata(
     metadata = make_local_metadata(metadata, tz)
 
     output = _add_suffix(
-        metadata.type, output_folder /
-        (metadata.date.strftime('%Y-%m-%d_%H:%M_') + root.name))
+        metadata.type,
+        output_folder /
+        (metadata.date.strftime("%Y-%m-%d_%H:%M_") + root.name),
+    )
     logger.debug(f"output file: {output}")
     assert not output.exists()
 

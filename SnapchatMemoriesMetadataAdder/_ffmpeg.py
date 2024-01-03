@@ -11,7 +11,7 @@ def ffmpeg_add_metadata(base: Path, overlay: Optional[Path],
                         metadata: Metadata, output: Path) -> Optional[Popen]:
     """Use ffmpeg to add metadata to a video. Returns a Popen to the
     process running ffmpeg.
-    
+
     NOTE: Only works on videos, does not work on images!"""
     assert metadata.type == MediaType.Video
 
@@ -28,7 +28,8 @@ def ffmpeg_add_metadata(base: Path, overlay: Optional[Path],
             overlay_video,  # video
             vid.audio,  # audio
             str(output),  # output file
-            metadata=creation_time).run_async(quiet=True)
+            metadata=creation_time,
+        ).run_async(quiet=True)
         return process
     else:
         # Don't run async! We just copy the video/audio over, it's very quick.
