@@ -68,7 +68,7 @@ def add_metadata(
 
     output = _add_suffix(
         metadata.type,
-        output_folder / (metadata.date.strftime("%Y-%m-%d_%H:%M_") + root.name),
+        output_folder / (metadata.date.strftime("%Y-%m-%d_%H_%M_") + root.name),
     )
     logger.debug(f"output file: {output}")
     assert not output.exists()
