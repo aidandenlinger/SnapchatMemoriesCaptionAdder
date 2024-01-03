@@ -8,6 +8,7 @@ class Args(NamedTuple):
     memories_history: Path
     memories_folder: Path
     output_folder: Path
+    verbose: bool
 
 
 def parse_args() -> Args:
@@ -27,6 +28,11 @@ def parse_args() -> Args:
                         dest="memories_folder",
                         default=str(default_memories_folder))
     parser.add_argument("--output", default=str(default_output_folder))
+    parser.add_argument(
+        "--verbose",
+        "-v",
+        action='store_true',  # So if this flag is present, it will save as True
+        help="Output what the script is doing to help debug any issues")
 
     args_raw = parser.parse_args()
 
@@ -52,4 +58,5 @@ def parse_args() -> Args:
             "Please delete this directory if you intend to use it as the "
             "output folder.")
 
-    return Args(memories_history, memories_folder, output_folder)
+    return Args(memories_history, memories_folder, output_folder,
+                args_raw.verbose)

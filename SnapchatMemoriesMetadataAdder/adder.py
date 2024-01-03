@@ -15,6 +15,8 @@ from SnapchatMemoriesMetadataAdder.metadata import (
     make_local_metadata,
 )
 
+logger = logging.getLogger("__snap")
+
 
 def _add_suffix(type: MediaType, path: Path) -> Path:
     """Add the proper suffix for the given MediaType."""
@@ -44,9 +46,9 @@ def add_metadata(
 
     base = _add_suffix(metadata.type, root.with_name(root.name + "-main"))
 
-    logging.debug(f"base image found: {base}")
+    logger.debug(f"base image found: {base}")
     if not base.exists():
-        logging.warning(f"base image {base} does not exist!")
+        logger.warning(f"base image {base} does not exist!")
         return None
 
     # Note: all overlays are pngs
@@ -55,7 +57,7 @@ def add_metadata(
         root.with_name(root.name +
                        "-overlay").with_suffix(".png")).exists() else None
 
-    logging.debug(f"Overlay: {overlay}")
+    logger.debug(f"Overlay: {overlay}")
 
     # Update to local timezone
     metadata = make_local_metadata(metadata, tz)
@@ -63,7 +65,7 @@ def add_metadata(
     output = _add_suffix(
         metadata.type, output_folder /
         (metadata.date.strftime('%Y-%m-%d_%H:%M_') + root.name))
-    logging.debug(f"output file: {output}")
+    logger.debug(f"output file: {output}")
     assert not output.exists()
 
     # Delegate to libraries to add metadata to the output file

@@ -2,6 +2,7 @@ import json
 import logging
 from functools import partial
 from multiprocessing import cpu_count
+from sys import stderr
 from time import sleep
 
 from tqdm import tqdm
@@ -14,9 +15,19 @@ from SnapchatMemoriesMetadataAdder.parser import parse_history
 
 
 def main():
-    # logging.basicConfig(level=logging.DEBUG)
     args = parse_args()
-    logging.debug(args)
+
+    if args.verbose:
+        snapLogger = logging.getLogger("__snap")
+        out = logging.StreamHandler(stderr)
+        out.setFormatter(logging.Formatter("%(levelname)s - %(message)s"))
+        snapLogger.addHandler(out)
+        snapLogger.setLevel(logging.DEBUG)
+
+        snapLogger.debug(args)
+    else:
+        logging.basicConfig(level=logging.WARNING)
+
     args.output_folder.mkdir()
 
     with args.memories_history.open() as metadata:
