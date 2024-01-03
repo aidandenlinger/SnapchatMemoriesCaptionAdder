@@ -7,6 +7,8 @@ from dateutil.tz import UTC
 
 from SnapchatMemoriesMetadataAdder.metadata import MID, Location, MediaType, Metadata
 
+logger = logging.getLogger("__snap")
+
 
 def parse_history(
         memory_history: Sequence[Mapping[str, str]]) -> Collection[Metadata]:
@@ -36,11 +38,10 @@ def parse_history(
         # data. If someone *does* have an issue it should be loud
         if mid in {p.mid for p in parsed}:
             if data not in parsed:
-                logging.warning(
-                    f"Duplicate MID with different data: {mid} and "
-                    f"{[p for p in parsed if p.mid == mid]}")
+                logger.warning(f"Duplicate MID with different data: {mid} and "
+                               f"{[p for p in parsed if p.mid == mid]}")
             else:
-                logging.info(
+                logger.info(
                     f"{mid} has duplicates in memories_history.json but has "
                     "same data, continuing...")
                 continue

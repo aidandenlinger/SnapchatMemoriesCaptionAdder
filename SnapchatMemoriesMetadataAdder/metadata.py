@@ -9,12 +9,14 @@ MID = str
 
 class MediaType(StrEnum):
     """The two types of media that can exist."""
-    Image = auto(),
+
+    Image = auto()
     Video = auto()
 
 
 class Location(NamedTuple):
     """Location where a photo was taken."""
+
     latitude: float
     longitude: float
 
@@ -22,6 +24,7 @@ class Location(NamedTuple):
 @dataclass(frozen=True)
 class Metadata:
     """Metadata for a Memories file."""
+
     date: datetime
     type: MediaType
     location: Location

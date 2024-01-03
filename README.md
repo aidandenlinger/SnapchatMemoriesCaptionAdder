@@ -99,6 +99,11 @@ timestamps and captions. (Note: this will create a new copy of each photo/video,
 so make sure you have enough space!) Alternatively, use the `--output` flag to
 provide a different location to dump the photos.
 
+If you run into issues, please run the script with the `-v` or `--verbose`
+flag, which will output information on what the script is doing. If that
+doesn't help you with the issue, open a github issue with that output! You
+can also use the `-vv` flag to get logs from ffmpeg/vips.
+
 > **Warning**
 > If your captions are important to you, double check the final result against
 > the photos in the Snapchat app! I found that the memories export did not

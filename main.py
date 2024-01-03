@@ -2,21 +2,36 @@ import json
 import logging
 from functools import partial
 from multiprocessing import cpu_count
+from sys import stderr
 from time import sleep
 
 from tqdm import tqdm
 from tqdm.contrib.concurrent import process_map
 
-from args import parse_args
+from args import VerboseLevel, parse_args
 from SnapchatMemoriesMetadataAdder.adder import add_file_creation, add_metadata
 from SnapchatMemoriesMetadataAdder.metadata import MediaType
 from SnapchatMemoriesMetadataAdder.parser import parse_history
 
 
 def main():
-    # logging.basicConfig(level=logging.DEBUG)
     args = parse_args()
-    logging.debug(args)
+
+    match args.verbose:
+        case VerboseLevel.NONE:
+            logging.basicConfig(level=logging.WARNING)
+        case VerboseLevel.PROGRAM:
+            snapLogger = logging.getLogger("__snap")
+            out = logging.StreamHandler(stderr)
+            out.setFormatter(logging.Formatter("%(levelname)s - %(message)s"))
+            snapLogger.addHandler(out)
+            snapLogger.setLevel(logging.DEBUG)
+
+            snapLogger.debug(args)
+        case VerboseLevel.PROGRAM_AND_LIBRARIES:
+            logging.basicConfig(level=logging.DEBUG)
+            logging.debug(args)
+
     args.output_folder.mkdir()
 
     with args.memories_history.open() as metadata:
@@ -34,14 +49,14 @@ def main():
     images = [
         res for res in process_map(
             partial(add_metadata, args.memories_folder, args.output_folder),
-            [img for img in parsed if img.type == MediaType.Image])
-        if res is not None
+            [img for img in parsed if img.type == MediaType.Image],
+        ) if res is not None
     ]
 
     # This is the only reason I return the metadata, so I can do the
     # process_map and still keep track of the metadata... This is a lazy bad
     # solution :(
-    for (path, metadata, _) in images:
+    for path, metadata, _ in images:
         files.append((path, metadata))
 
     processes = []
@@ -51,7 +66,12 @@ def main():
           "(this will be slower than the pictures and will have hitches!)")
     for metadata in tqdm(
         [vid for vid in parsed if vid.type == MediaType.Video]):
-        res = add_metadata(args.memories_folder, args.output_folder, metadata)
+        res = add_metadata(
+            args.memories_folder,
+            args.output_folder,
+            metadata,
+            ffmpeg_quiet=args.verbose != VerboseLevel.PROGRAM_AND_LIBRARIES,
+        )
         if res is not None:
             (path, metadata, process) = res
 
@@ -76,7 +96,7 @@ def main():
     # We used to do this in add_metadata! But since ffmpeg runs async now, the
     # file won't exist until ffmpeg is done, so we have to wait until the end
     # and make main ugly :)
-    for (path, metadata) in files:
+    for path, metadata in files:
         add_file_creation(path, metadata)
 
     print("Done!")
