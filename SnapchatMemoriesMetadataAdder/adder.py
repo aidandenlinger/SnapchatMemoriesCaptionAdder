@@ -31,7 +31,8 @@ def add_metadata(
     memory_folder: Path,
     output_folder: Path,
     metadata: Metadata,
-    tz: tzinfo = tzlocal()
+    tz: tzinfo = tzlocal(),
+    ffmpeg_quiet: bool = True,
 ) -> Optional[tuple[Path, Metadata, Optional[Popen]]]:
     """Given an input/output folder, the metadata for the memory, and
     optionally a timezone, add the overlay and timezone to the memory and write
@@ -52,11 +53,13 @@ def add_metadata(
         return None
 
     # Note: all overlays are pngs
-    overlay = (overlay if
-               (overlay :=
-                root.with_name(root.name +
-                               "-overlay").with_suffix(".png")).exists() else
-               None)
+    overlay = (
+        overlay
+        if (
+            overlay := root.with_name(root.name + "-overlay").with_suffix(".png")
+        ).exists()
+        else None
+    )
 
     logger.debug(f"Overlay: {overlay}")
 
@@ -65,8 +68,7 @@ def add_metadata(
 
     output = _add_suffix(
         metadata.type,
-        output_folder /
-        (metadata.date.strftime("%Y-%m-%d_%H:%M_") + root.name),
+        output_folder / (metadata.date.strftime("%Y-%m-%d_%H:%M_") + root.name),
     )
     logger.debug(f"output file: {output}")
     assert not output.exists()
@@ -77,7 +79,9 @@ def add_metadata(
             vips_add_metadata(base, overlay, metadata, output)
             process = None
         case MediaType.Video:
-            process = ffmpeg_add_metadata(base, overlay, metadata, output)
+            process = ffmpeg_add_metadata(
+                base, overlay, metadata, output, quiet=ffmpeg_quiet
+            )
 
     # sorry :(
     return (output, metadata, process)

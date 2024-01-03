@@ -8,7 +8,7 @@ from time import sleep
 from tqdm import tqdm
 from tqdm.contrib.concurrent import process_map
 
-from args import parse_args
+from args import VerboseLevel, parse_args
 from SnapchatMemoriesMetadataAdder.adder import add_file_creation, add_metadata
 from SnapchatMemoriesMetadataAdder.metadata import MediaType
 from SnapchatMemoriesMetadataAdder.parser import parse_history
@@ -17,16 +17,20 @@ from SnapchatMemoriesMetadataAdder.parser import parse_history
 def main():
     args = parse_args()
 
-    if args.verbose:
-        snapLogger = logging.getLogger("__snap")
-        out = logging.StreamHandler(stderr)
-        out.setFormatter(logging.Formatter("%(levelname)s - %(message)s"))
-        snapLogger.addHandler(out)
-        snapLogger.setLevel(logging.DEBUG)
+    match args.verbose:
+        case VerboseLevel.NONE:
+            logging.basicConfig(level=logging.WARNING)
+        case VerboseLevel.PROGRAM:
+            snapLogger = logging.getLogger("__snap")
+            out = logging.StreamHandler(stderr)
+            out.setFormatter(logging.Formatter("%(levelname)s - %(message)s"))
+            snapLogger.addHandler(out)
+            snapLogger.setLevel(logging.DEBUG)
 
-        snapLogger.debug(args)
-    else:
-        logging.basicConfig(level=logging.WARNING)
+            snapLogger.debug(args)
+        case VerboseLevel.PROGRAM_AND_LIBRARIES:
+            logging.basicConfig(level=logging.DEBUG)
+            logging.debug(args)
 
     args.output_folder.mkdir()
 
@@ -62,7 +66,12 @@ def main():
           "(this will be slower than the pictures and will have hitches!)")
     for metadata in tqdm(
         [vid for vid in parsed if vid.type == MediaType.Video]):
-        res = add_metadata(args.memories_folder, args.output_folder, metadata)
+        res = add_metadata(
+            args.memories_folder,
+            args.output_folder,
+            metadata,
+            ffmpeg_quiet=args.verbose != VerboseLevel.PROGRAM_AND_LIBRARIES,
+        )
         if res is not None:
             (path, metadata, process) = res
 

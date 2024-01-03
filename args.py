@@ -1,6 +1,13 @@
 import argparse
+from enum import Enum, auto
 from pathlib import Path
 from typing import NamedTuple
+
+
+class VerboseLevel(Enum):
+    NONE = auto()
+    PROGRAM = auto()
+    PROGRAM_AND_LIBRARIES = auto()
 
 
 class Args(NamedTuple):
@@ -9,7 +16,7 @@ class Args(NamedTuple):
     memories_history: Path
     memories_folder: Path
     output_folder: Path
-    verbose: bool
+    verbose: VerboseLevel
 
 
 def parse_args() -> Args:
@@ -36,8 +43,10 @@ def parse_args() -> Args:
     parser.add_argument(
         "--verbose",
         "-v",
-        action="store_true",  # So if this flag is present, it will save as True
-        help="Output what the script is doing to help debug any issues",
+        action="count",
+        default=0,
+        help=
+        "Output what the script is doing to help debug any issues. -v will get logs from just this application, -vv will also get logs from ffmpeg and vips libraries",
     )
 
     args_raw = parser.parse_args()
@@ -64,5 +73,12 @@ def parse_args() -> Args:
             "Please delete this directory if you intend to use it as the "
             "output folder.")
 
-    return Args(memories_history, memories_folder, output_folder,
-                args_raw.verbose)
+    match args_raw.verbose:
+        case 0:
+            verbose = VerboseLevel.NONE
+        case 1:
+            verbose = VerboseLevel.PROGRAM
+        case _:
+            verbose = VerboseLevel.PROGRAM_AND_LIBRARIES
+
+    return Args(memories_history, memories_folder, output_folder, verbose)
