@@ -45,20 +45,24 @@ def add_metadata(
     # First, get/validate paths, then prepare for merging
     root = memory_folder / metadata.mid
 
-    base = _add_suffix(metadata.type, root.with_name(root.name + "-main"))
+    # From github issue #3, snapchat now adds the date before the mid.
+    # We have the date, we can reconstruct this filename.
+    base = _add_suffix(
+        metadata.type,
+        root.with_name(metadata.date.strftime("%Y-%m-%d_") + root.name + "-main"),
+    )
 
     if not base.exists():
-        # From github issue #3, snapchat adds the date before the mid.
-        # We have the date, we can reconstruct this name.
-        base = _add_suffix(
-            metadata.type,
-            root.with_name(metadata.date.strftime("%Y-%m-%d_") + root.name + "-main"),
-        )
+        # Try the old format for backwards compatibility with my own backup
+        new_format = base
+        base = _add_suffix(metadata.type, root.with_name(root.name + "-main"))
+
+        # if it STILL doesn't exist, it's over
+        if not base.exists():
+            logger.warning(f"base image {new_format} does not exist!")
+            return None
 
     logger.debug(f"base image name found: {base}")
-    if not base.exists():
-        logger.warning(f"base image {base} does not exist!")
-        return None
 
     # Note: all overlays are pngs
     overlay = (
