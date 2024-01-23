@@ -43,18 +43,17 @@ def add_metadata(
     ffmpeg-python's async implementation is not asyncio"""
 
     # First, get/validate paths, then prepare for merging
-    root = memory_folder / metadata.mid
+    root = memory_folder / (metadata.date.strftime("%Y-%m-%d_") + metadata.mid)
 
     # From github issue #3, snapchat now adds the date before the mid.
     # We have the date, we can reconstruct this filename.
-    base = _add_suffix(
-        metadata.type,
-        root.with_name(metadata.date.strftime("%Y-%m-%d_") + root.name + "-main"),
-    )
+    base = _add_suffix(metadata.type, root.with_name(root.name + "-main"))
 
     if not base.exists():
-        # Try the old format for backwards compatibility with my own backup
         new_format = base
+
+        # Try the old format for backwards compatibility with my own backup
+        root = memory_folder / metadata.mid
         base = _add_suffix(metadata.type, root.with_name(root.name + "-main"))
 
         # if it STILL doesn't exist, it's over
