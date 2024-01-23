@@ -9,9 +9,9 @@ from tqdm import tqdm
 from tqdm.contrib.concurrent import process_map
 
 from args import VerboseLevel, parse_args
-from SnapchatMemoriesMetadataAdder.adder import add_file_creation, add_metadata
-from SnapchatMemoriesMetadataAdder.metadata import MediaType
-from SnapchatMemoriesMetadataAdder.parser import parse_history
+from SnapchatMemoriesCaptionAdder.adder import add_file_creation, add_metadata
+from SnapchatMemoriesCaptionAdder.metadata import MediaType
+from SnapchatMemoriesCaptionAdder.parser import parse_history
 
 
 def main():

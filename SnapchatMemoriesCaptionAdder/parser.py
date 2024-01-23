@@ -5,7 +5,7 @@ from urllib.parse import parse_qs, urlparse
 
 from dateutil.tz import UTC
 
-from SnapchatMemoriesMetadataAdder.metadata import MID, Location, MediaType, Metadata
+from SnapchatMemoriesCaptionAdder.metadata import MID, Location, MediaType, Metadata
 
 logger = logging.getLogger("__snap")
 

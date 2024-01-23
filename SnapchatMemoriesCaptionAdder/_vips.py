@@ -3,7 +3,7 @@ from typing import Optional
 
 from pyvips import GValue, Image
 
-from SnapchatMemoriesMetadataAdder.metadata import MediaType, Metadata
+from SnapchatMemoriesCaptionAdder.metadata import MediaType, Metadata
 
 
 def vips_add_metadata(base: Path, overlay: Optional[Path], metadata: Metadata,

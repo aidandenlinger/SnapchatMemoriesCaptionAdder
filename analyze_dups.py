@@ -4,7 +4,7 @@ from collections import defaultdict
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
-from SnapchatMemoriesMetadataAdder.metadata import MID
+from SnapchatMemoriesCaptionAdder.metadata import MID
 
 
 def main() -> None:

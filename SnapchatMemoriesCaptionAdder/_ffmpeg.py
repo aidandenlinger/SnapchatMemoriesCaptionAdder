@@ -4,7 +4,7 @@ from typing import Optional
 
 import ffmpeg
 
-from SnapchatMemoriesMetadataAdder.metadata import MediaType, Metadata
+from SnapchatMemoriesCaptionAdder.metadata import MediaType, Metadata
 
 
 def ffmpeg_add_metadata(

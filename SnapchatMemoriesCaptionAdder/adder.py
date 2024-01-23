@@ -7,9 +7,9 @@ from typing import Optional
 
 from dateutil.tz import tzlocal
 
-from SnapchatMemoriesMetadataAdder._ffmpeg import ffmpeg_add_metadata
-from SnapchatMemoriesMetadataAdder._vips import vips_add_metadata
-from SnapchatMemoriesMetadataAdder.metadata import (
+from SnapchatMemoriesCaptionAdder._ffmpeg import ffmpeg_add_metadata
+from SnapchatMemoriesCaptionAdder._vips import vips_add_metadata
+from SnapchatMemoriesCaptionAdder.metadata import (
     MediaType,
     Metadata,
     make_local_metadata,

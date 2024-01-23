@@ -1,4 +1,4 @@
-# SnapchatMemoriesMetadataAdder
+# SnapchatMemoriesCaptionAdder
 
 ![Overview](doc/overview.webp)
 
@@ -114,7 +114,7 @@ can also use the `-vv` flag to get logs from ffmpeg/vips.
 
 Note: The timezone applied to the photos is set by your computer's local
 timezone! I'm open to any PRs to improve this (see below), but for a quick
-hack you can set the default timezone in SnapchatMemoriesMetadataAdder/adder.py
+hack you can set the default timezone in SnapchatMemoriesCaptionAdder/adder.py
 in the `add_metadata` signature.
 
 ## Contributing
