@@ -8,6 +8,7 @@ from typing import Optional
 from dateutil.tz import tzlocal
 
 from SnapchatMemoriesCaptionAdder._ffmpeg import ffmpeg_add_metadata
+from SnapchatMemoriesCaptionAdder._piexif import piexif_add_photo_location
 from SnapchatMemoriesCaptionAdder._vips import vips_add_metadata
 from SnapchatMemoriesCaptionAdder.metadata import (
     MediaType,
@@ -88,6 +89,7 @@ def add_metadata(
     match metadata.type:
         case MediaType.Image:
             vips_add_metadata(base, overlay, metadata, output)
+            piexif_add_photo_location(output, metadata)
             process = None
         case MediaType.Video:
             process = ffmpeg_add_metadata(
