@@ -40,6 +40,12 @@ The file's creation date is also set to the correct date.
 
 ## Install
 
+> [!NOTE]  
+> This project and docmumentation is not very friendly to non-developers :( If
+> you have questions, I'm happy to try and help if you make a new Github issue.
+> I'm very open to any PRs that want to work on this (see the Contributing
+> section below!)
+
 This project relies on two major libraries.
 
 - [ffmpeg](https://ffmpeg.org/) is "a complete, cross-platform solution to
@@ -70,6 +76,12 @@ python -m pip install -r requirements.txt
 to install the Python requirements for the project.
 
 ## Usage
+
+> [!NOTE]  
+> This project and docmumentation is not very friendly to non-developers :( If
+> you have questions, I'm happy to try and help if you make a new Github issue.
+> I'm very open to any PRs that want to work on this (see the Contributing
+> section below!)
 
 First, we need to get our data.
 
@@ -104,7 +116,7 @@ flag, which will output information on what the script is doing. If that
 doesn't help you with the issue, open a github issue with that output! You
 can also use the `-vv` flag to get logs from ffmpeg/vips.
 
-> **Warning**
+> [!WARNING]
 > If your captions are important to you, double check the final result against
 > the photos in the Snapchat app! I found that the memories export did not
 > include overlays/captions from some of my photos in 2017-2018. So check the
@@ -117,16 +129,22 @@ timezone! I'm open to any PRs to improve this (see below), but for a quick
 hack you can set the default timezone in SnapchatMemoriesCaptionAdder/adder.py
 in the `add_metadata` signature.
 
+## Thanks
+- [@n-katti](https://github.com/n-katti) for fixing issues on Windows and new Snapchat export format (issue #3)
+- [@Enricon27](https://github.com/Enricone27) for fixing a problem with the earlier fix :) (issue #3)
+- [@autumnesponda](https://github.com/autumnesponda) for adding location metadata
+
 ## Contributing
 
 This achieved what I needed it to do, so I don't anticipate adding many more
 features. I'd be happy to accept PRs for some feaures I didn't implement:
 
+- **Making this much more user friendly.** This is currently not accessible to
+  anyone who doesn't have knowledge of installing and using libraries.
+    - Bundling libraries with the app
+    - Creating a GUI
 - Cleaning the project up :) Introducing python-ffmpeg's async definitely made
   this functional but messy.
-- Inserting location metadata into the final photos. The locations are parsed,
-  they just aren't added to the photos. You'll need to find the proper EXIF
-  tags.
 - Snapchat uses UTC as the timezone for the timestamps. This script takes a
   guess that your computer's local time zone is the timezone you want the
   timestamps in. Allowing the user to specify a timezone, or automatically
