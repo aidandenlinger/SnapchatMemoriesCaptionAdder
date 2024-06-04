@@ -100,10 +100,9 @@ Now, make a folder in this repo called `input` and put the `memories` folder
 from the first export and the `memories_history.json` file from the second
 export into it.
   - Alternatively, you can provide the location of the `memories_history.json`
-file with the `--memories-history` flag and the memories folder with the
-`memories` flag, for example `python main.py --memories-history
-test/memories_history.json --memories-folder test/memories --output
-test_output`.
+    file with the `--memories-history` flag and the memories folder with the
+    `memories` flag, for example `python main.py --memories-history test/
+    memories_history.json --memories-folder test/memories --output test_output`.
 
 With this folder prepared, you can now run `python main.py` to run the script!
 It will create a new folder called `output` that will hold all memories with
@@ -115,6 +114,10 @@ If you run into issues, please run the script with the `-v` or `--verbose`
 flag, which will output information on what the script is doing. If that
 doesn't help you with the issue, open a github issue with that output! You
 can also use the `-vv` flag to get logs from ffmpeg/vips.
+
+Some other flags:
+- `--image-only` will only convert images and not videos!
+- `--video-only` will only convert videos and not images!
 
 > [!WARNING]
 > If your captions are important to you, double check the final result against

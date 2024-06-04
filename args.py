@@ -10,6 +10,13 @@ class VerboseLevel(Enum):
     PROGRAM_AND_LIBRARIES = auto()
 
 
+class MediaToHandle(Enum):
+    """Arg to select what media to convert."""
+    ALL = auto()
+    IMAGE = auto()
+    VIDEO = auto()
+
+
 class Args(NamedTuple):
     """A class to specifically name the arguments."""
 
@@ -17,6 +24,7 @@ class Args(NamedTuple):
     memories_folder: Path
     output_folder: Path
     verbose: VerboseLevel
+    type_handled: MediaToHandle
 
 
 def parse_args() -> Args:
@@ -48,6 +56,9 @@ def parse_args() -> Args:
         help=
         "Output what the script is doing to help debug any issues. -v will get logs from just this application, -vv will also get logs from ffmpeg and vips libraries",
     )
+    type_handled_group = parser.add_mutually_exclusive_group()
+    type_handled_group.add_argument("--image-only", help="Only process images", action="store_true")
+    type_handled_group.add_argument("--video-only", help="Only process videos", action="store_true")
 
     args_raw = parser.parse_args()
 
@@ -81,4 +92,12 @@ def parse_args() -> Args:
         case _:
             verbose = VerboseLevel.PROGRAM_AND_LIBRARIES
 
-    return Args(memories_history, memories_folder, output_folder, verbose)
+    if args_raw.image_only:
+        type_handled = MediaToHandle.IMAGE
+    elif args_raw.video_only:
+        type_handled = MediaToHandle.VIDEO
+    else:
+        type_handled = MediaToHandle.ALL
+
+    return Args(memories_history, memories_folder, output_folder, verbose,
+                type_handled)

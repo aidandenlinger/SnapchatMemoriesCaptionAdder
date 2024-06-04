@@ -8,7 +8,7 @@ from time import sleep
 from tqdm import tqdm
 from tqdm.contrib.concurrent import process_map
 
-from args import VerboseLevel, parse_args
+from args import MediaToHandle, VerboseLevel, parse_args
 from SnapchatMemoriesCaptionAdder.adder import add_file_creation, add_metadata
 from SnapchatMemoriesCaptionAdder.metadata import MediaType
 from SnapchatMemoriesCaptionAdder.parser import parse_history
@@ -45,52 +45,58 @@ def main():
     # images and videos separately, and now main is complicated. Oh well...
 
     # Parse all the images in parallel
-    print("Handling images...")
-    images = [
-        res for res in process_map(
-            partial(add_metadata, args.memories_folder, args.output_folder),
-            [img for img in parsed if img.type == MediaType.Image],
-        ) if res is not None
-    ]
+    if (args.type_handled == MediaToHandle.ALL
+            or args.type_handled == MediaToHandle.IMAGE):
+        print("Handling images...")
+        images = [
+            res for res in process_map(
+                partial(add_metadata, args.memories_folder,
+                        args.output_folder),
+                [img for img in parsed if img.type == MediaType.Image],
+            ) if res is not None
+        ]
 
-    # This is the only reason I return the metadata, so I can do the
-    # process_map and still keep track of the metadata... This is a lazy bad
-    # solution :(
-    for path, metadata, _ in images:
-        files.append((path, metadata))
-
-    processes = []
-    num_of_cpus = cpu_count()
-
-    print("Handling videos... "
-          "(this will be slower than the pictures and will have hitches!)")
-    for metadata in tqdm(
-        [vid for vid in parsed if vid.type == MediaType.Video]):
-        res = add_metadata(
-            args.memories_folder,
-            args.output_folder,
-            metadata,
-            ffmpeg_quiet=args.verbose != VerboseLevel.PROGRAM_AND_LIBRARIES,
-        )
-        if res is not None:
-            (path, metadata, process) = res
-
+        # This is the only reason I return the metadata, so I can do the
+        # process_map and still keep track of the metadata... This is a lazy bad
+        # solution :(
+        for path, metadata, _ in images:
             files.append((path, metadata))
-            if process:
-                processes.append(process)
 
-        # Stop processing at 7 to prevent crashing, wait for any of them to be
-        # done then keep going
-        # Yes, we're busy waiting, but I'm lazy
-        if len(processes) == num_of_cpus - 1:
-            while len([p for p in processes if p.poll() is not None]) == 0:
-                sleep(1)
-            processes = [p for p in processes if p.poll() is None]
+    if (args.type_handled == MediaToHandle.ALL
+            or args.type_handled == MediaToHandle.VIDEO):
+        processes = []
+        num_of_cpus = cpu_count()
 
-    # Wait on the final processes
-    print("Waiting for final videos...")
-    for process in tqdm(processes):
-        process.wait()
+        print("Handling videos... "
+              "(this will be slower than the pictures and will have hitches!)")
+        for metadata in tqdm(
+            [vid for vid in parsed if vid.type == MediaType.Video]):
+            res = add_metadata(
+                args.memories_folder,
+                args.output_folder,
+                metadata,
+                ffmpeg_quiet=args.verbose
+                != VerboseLevel.PROGRAM_AND_LIBRARIES,
+            )
+            if res is not None:
+                (path, metadata, process) = res
+
+                files.append((path, metadata))
+                if process:
+                    processes.append(process)
+
+            # Stop processing at 7 to prevent crashing, wait for any of them to be
+            # done then keep going
+            # Yes, we're busy waiting, but I'm lazy
+            if len(processes) == num_of_cpus - 1:
+                while len([p for p in processes if p.poll() is not None]) == 0:
+                    sleep(1)
+                processes = [p for p in processes if p.poll() is None]
+
+        # Wait on the final processes
+        print("Waiting for final videos...")
+        for process in tqdm(processes):
+            process.wait()
 
     # Okay, and now with all the files we can change their modification dates.
     # We used to do this in add_metadata! But since ffmpeg runs async now, the
