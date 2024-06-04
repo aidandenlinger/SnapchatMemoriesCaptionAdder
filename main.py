@@ -48,11 +48,16 @@ def main():
     if (args.type_handled == MediaToHandle.ALL
             or args.type_handled == MediaToHandle.IMAGE):
         print("Handling images...")
+
+        image_inputs = [img for img in parsed if img.type == MediaType.Image]
+        if args.only_one:
+            image_inputs = image_inputs[:1]
+
         images = [
             res for res in process_map(
                 partial(add_metadata, args.memories_folder,
                         args.output_folder),
-                [img for img in parsed if img.type == MediaType.Image],
+                image_inputs,
             ) if res is not None
         ]
 
@@ -69,8 +74,11 @@ def main():
 
         print("Handling videos... "
               "(this will be slower than the pictures and will have hitches!)")
-        for metadata in tqdm(
-            [vid for vid in parsed if vid.type == MediaType.Video]):
+        video_inputs = [vid for vid in parsed if vid.type == MediaType.Video]
+        if args.only_one:
+            video_inputs = video_inputs[:1]
+
+        for metadata in tqdm(video_inputs):
             res = add_metadata(
                 args.memories_folder,
                 args.output_folder,
