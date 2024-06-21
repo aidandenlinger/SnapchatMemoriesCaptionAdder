@@ -41,10 +41,10 @@ The file's creation date is also set to the correct date.
 ## Install
 
 > [!NOTE]  
-> This project and docmumentation is not very friendly to non-developers :( If
+> This project and documentation is not very friendly to non-developers :( If
 > you have questions, I'm happy to try and help if you make a new Github issue.
-> I'm very open to any PRs that want to work on this (see the Contributing
-> section below!)
+> I'm very open to any PRs that want to work on making this more user-friendly
+> (see the Contribution section below!)
 
 This project relies on two major libraries.
 
@@ -78,10 +78,10 @@ to install the Python requirements for the project.
 ## Usage
 
 > [!NOTE]  
-> This project and docmumentation is not very friendly to non-developers :( If
+> This project and documentation is not very friendly to non-developers :( If
 > you have questions, I'm happy to try and help if you make a new Github issue.
-> I'm very open to any PRs that want to work on this (see the Contributing
-> section below!)
+> I'm very open to any PRs that want to work on making this more user-friendly
+> (see the Contribution section below!)
 
 First, we need to get our data.
 
@@ -101,8 +101,9 @@ from the first export and the `memories_history.json` file from the second
 export into it.
   - Alternatively, you can provide the location of the `memories_history.json`
     file with the `--memories-history` flag and the memories folder with the
-    `memories` flag, for example `python main.py --memories-history test/
-    memories_history.json --memories-folder test/memories --output test_output`.
+    `memories` flag, for example `python main.py --memories-history
+    test/memories_history.json --memories-folder test/memories --output
+    test_output`.
 
 With this folder prepared, you can now run `python main.py` to run the script!
 It will create a new folder called `output` that will hold all memories with
