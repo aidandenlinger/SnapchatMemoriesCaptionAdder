@@ -83,18 +83,25 @@ to install the Python requirements for the project.
 > I'm very open to any PRs that want to work on making this more user-friendly
 > (see the Contribution section below!)
 
-First, we need to get our data.
+First, we need to get our data. [Follow Snapchat's instructions to download your
+data](https://help.snapchat.com/hc/en-us/articles/7012305371156). You'll need to
+do two separate exports:
 
-- [Follow Snapchat's instructions to download your
-  data](https://help.snapchat.com/hc/en-gb/articles/7012305371156), making sure
-  to "Include your memories as a downloadable file" and put no date range to
-  get all memories! Wait for an email and download when ready. (Note: this may
-  take up a significant amount of space!) If you get multiple zip files, merge
-  all the `memories` folders into one `memories` folder. This is the only folder
-  you need.
-- Next, request your data again, but *do not* include your memories. This
-  should be much quicker :) In this data export, make sure you have a
-  `json/memories_history.json`. This is the metadata for the memories.
+- Check "Include your Memories, Chat Media and Shared Stories" to download all
+  your memories. (Note: this may take up a significant amount of space!) The
+  status of the other checkmarks shouldn't matter, so feel free to export any
+  additional data you'd like. Make sure the date range includes everything you
+  want to export! If you choose to download multiple data packages, merge all
+  the `memories` folders into one `memories` folder. This is the only folder you
+  need from the export for this script.
+  
+- Create a second export, *without* "Include your Memories, Chat Media and
+  Shared Stories" checked, and *with* "Export JSON files" and "Memories and
+  Other Media" checked. Use the same date range as your first export. This
+  export should take much less time for Snapchat to send to you :) In this
+  data export, make sure you have a `json/memories_history.json`. This is the
+  metadata for the memories, which is only generated when you *don't* export
+  your memories.
 
 Now, make a folder in this repo called `input` and put the `memories` folder
 from the first export and the `memories_history.json` file from the second
