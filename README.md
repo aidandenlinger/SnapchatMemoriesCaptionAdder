@@ -49,14 +49,19 @@ The file's creation date is also set to the correct date.
 This project relies on two major libraries.
 
 - [ffmpeg](https://ffmpeg.org/) is "a complete, cross-platform solution to
-  record, convert and stream audio and video." This project uses it to overlay
-  the captions onto videos. If you're on Linux, download it from your package
-  manager, if you're on MacOS, install it from
-  [brew](https://formulae.brew.sh/formula/ffmpeg), and if you're on Windows,
-  install it from
-  [winget](https://learn.microsoft.com/en-us/windows/package-manager/winget/)
-  (package [here](https://winget.run/pkg/Gyan/FFmpeg)).
-- [libvips](https://www.libvips.org/) is "a demand-driven, horizontally threaded
+  record, convert and stream audio and video." This project uses ffmpeg 6 to
+  overlay the captions onto videos. If you're on Linux, download ffmpeg 6 from
+  your package manager, if you're on MacOS, install `ffmpeg@6` from
+  [brew](https://formulae.brew.sh/formula/ffmpeg@6), and if you're on
+  Windows, install it from
+  [winget](https://learn.microsoft.com/en-us/windows/package-manager/ winget/)
+  with `winget install -e --id Gyan.FFmpeg --version 6.0` (package
+  [here](https://winget.run/pkg/Gyan/FFmpeg)).
+    - Currently, this project does not work with ffmpeg 7.1+ due to this
+      script using the depreciated `scale2ref` filter, please see #7 for more
+      information. I plan on fixing this once ffmpeg 7 is available in Fedora
+      Linux.
+  - [libvips](https://www.libvips.org/) is "a demand-driven, horizontally threaded
   image processing library. Compared to similar libraries, libvips runs quickly
   and uses little memory." This project uses it to overlay the captions onto
   images. If you're on Linux, download it from your package manager, if you're
