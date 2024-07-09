@@ -60,7 +60,7 @@ def parse_args() -> Args:
     parser.add_argument(
         "--only-one",
         action="store_true",
-        help="Only convert one file of each time, intended to make debugging easier"
+        help="Only convert one file of each type, intended to make debugging easier"
     )
     type_handled_group = parser.add_mutually_exclusive_group()
     type_handled_group.add_argument("--image-only", help="Only process images", action="store_true")
