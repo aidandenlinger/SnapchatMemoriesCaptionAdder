@@ -61,7 +61,8 @@ This project relies on two major libraries.
       script using the depreciated `scale2ref` filter, please see #7 for more
       information. I plan on fixing this once ffmpeg 7 is available in Fedora
       Linux.
-  - [libvips](https://www.libvips.org/) is "a demand-driven, horizontally threaded
+
+- [libvips](https://www.libvips.org/) is "a demand-driven, horizontally threaded
   image processing library. Compared to similar libraries, libvips runs quickly
   and uses little memory." This project uses it to overlay the captions onto
   images. If you're on Linux, download it from your package manager, if you're
