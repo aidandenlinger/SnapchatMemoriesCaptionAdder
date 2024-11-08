@@ -54,7 +54,7 @@ This project relies on two major libraries.
   your package manager, if you're on MacOS, install `ffmpeg@6` from
   [brew](https://formulae.brew.sh/formula/ffmpeg@6), and if you're on
   Windows, install it from
-  [winget](https://learn.microsoft.com/en-us/windows/package-manager/ winget/)
+  [winget](https://learn.microsoft.com/en-us/windows/package-manager/winget/)
   with `winget install -e --id Gyan.FFmpeg --version 6.0` (package
   [here](https://winget.run/pkg/Gyan/FFmpeg)).
     - Currently, this project does not work with ffmpeg 7.1+ due to this
