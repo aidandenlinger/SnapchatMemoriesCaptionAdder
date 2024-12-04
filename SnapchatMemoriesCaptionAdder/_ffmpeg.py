@@ -67,5 +67,7 @@ def ffmpeg_add_metadata(
     else:
         # Don't run async! We just copy the video/audio over, it's very quick.
         # Async on the large ones
-        vid.output(str(output), codec="copy", **metadata_dict).run(quiet=quiet)
+        output_node = vid.output(str(output), codec="copy", **metadata_dict) 
+        logger.debug(f"Compiled ffmpeg command: {" ".join(output_node.compile())}")
+        output_node.run(quiet=quiet)
         return None
