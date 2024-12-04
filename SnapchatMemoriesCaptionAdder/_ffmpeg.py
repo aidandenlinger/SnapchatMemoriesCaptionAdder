@@ -55,12 +55,14 @@ def ffmpeg_add_metadata(
         scaled = ffmpeg.filter_multi_output([overlay_img, vid], "scale2ref")
         # Overlay the overlay onto the video!
         overlay_video = scaled[1].overlay(scaled[0])
-        process = ffmpeg.output(
+        output_node = ffmpeg.output(
             overlay_video,  # video
             vid.audio,  # audio
             str(output),  # output file
             **metadata_dict  # metadata hack
-        ).run_async(quiet=quiet)
+        )
+        logger.debug(f"Compiled ffmpeg command: {" ".join(output_node.compile())}")
+        process = output_node.run_async(quiet=quiet)
         return process
     else:
         # Don't run async! We just copy the video/audio over, it's very quick.
