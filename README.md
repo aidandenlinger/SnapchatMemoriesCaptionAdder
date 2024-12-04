@@ -146,10 +146,10 @@ hack you can set the default timezone in SnapchatMemoriesCaptionAdder/adder.py
 in the `add_metadata` signature.
 
 ## Thanks
-- [@n-katti](https://github.com/n-katti) for fixing issues on Windows and new Snapchat export format (issue #3)
-- [@Enricon27](https://github.com/Enricone27) for fixing a problem with the earlier fix :) (issue #3)
+- [@n-katti](https://github.com/n-katti) for fixing issues on Windows and new Snapchat export format (issue [#3](https://github.com/aidandenlinger/SnapchatMemoriesCaptionAdder/issues/13))
+- [@Enricon27](https://github.com/Enricone27) for fixing a problem with the earlier fix :) (issue [#3](https://github.com/aidandenlinger/SnapchatMemoriesCaptionAdder/issues/3))
 - [@autumnesponda](https://github.com/autumnesponda) for adding location metadata
-- [@harrydayexe](https://github.com/harrydayexe) for adding FFMPEG 7.1 support (issue #7 and #14)
+- [@harrydayexe](https://github.com/harrydayexe) for adding FFMPEG 7.1 support (issue [#7](https://github.com/aidandenlinger/SnapchatMemoriesCaptionAdder/issues/7) and [#14](https://github.com/aidandenlinger/SnapchatMemoriesCaptionAdder/issues/14))
 
 ## Contributing
 
