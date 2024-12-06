@@ -52,9 +52,9 @@ def ffmpeg_add_metadata(
     if overlay:
         overlay_img = ffmpeg.input(str(overlay))
         # Use scale2ref to scale the overlay to the video
-        scaled = ffmpeg.filter_multi_output([overlay_img, vid], "scale2ref")
+        scaled = overlay_img.filter("scale", '-1', 'rh')
         # Overlay the overlay onto the video!
-        overlay_video = scaled[1].overlay(scaled[0])
+        overlay_video = vid.overlay(scaled, eof_action="repeat")
         output_node = ffmpeg.output(
             overlay_video,  # video
             vid.audio,  # audio

@@ -49,18 +49,14 @@ The file's creation date is also set to the correct date.
 This project relies on two major libraries.
 
 - [ffmpeg](https://ffmpeg.org/) is "a complete, cross-platform solution to
-  record, convert and stream audio and video." This project uses ffmpeg 6 to
-  overlay the captions onto videos. If you're on Linux, download ffmpeg 6 from
-  your package manager, if you're on MacOS, install `ffmpeg@6` from
-  [brew](https://formulae.brew.sh/formula/ffmpeg@6), and if you're on
+  record, convert and stream audio and video." This project uses ffmpeg to
+  overlay the captions onto videos. If you're on Linux, download ffmpeg from
+  your package manager, if you're on MacOS, install `ffmpeg` from
+  [brew](https://formulae.brew.sh/formula/ffmpeg), and if you're on
   Windows, install it from
   [winget](https://learn.microsoft.com/en-us/windows/package-manager/winget/)
-  with `winget install -e --id Gyan.FFmpeg --version 6.0` (package
+  with `winget install -e --id Gyan.FFmpeg` (package
   [here](https://winget.run/pkg/Gyan/FFmpeg)).
-    - Currently, this project does not work with ffmpeg 7.1+ due to this
-      script using the depreciated `scale2ref` filter, please see #7 for more
-      information. I plan on fixing this once ffmpeg 7 is available in Fedora
-      Linux.
 
 - [libvips](https://www.libvips.org/) is "a demand-driven, horizontally threaded
   image processing library. Compared to similar libraries, libvips runs quickly
@@ -150,9 +146,10 @@ hack you can set the default timezone in SnapchatMemoriesCaptionAdder/adder.py
 in the `add_metadata` signature.
 
 ## Thanks
-- [@n-katti](https://github.com/n-katti) for fixing issues on Windows and new Snapchat export format (issue #3)
-- [@Enricon27](https://github.com/Enricone27) for fixing a problem with the earlier fix :) (issue #3)
+- [@n-katti](https://github.com/n-katti) for fixing issues on Windows and new Snapchat export format (issue [#3](https://github.com/aidandenlinger/SnapchatMemoriesCaptionAdder/issues/3))
+- [@Enricon27](https://github.com/Enricone27) for fixing a problem with the earlier fix :) (issue [#3](https://github.com/aidandenlinger/SnapchatMemoriesCaptionAdder/issues/3))
 - [@autumnesponda](https://github.com/autumnesponda) for adding location metadata
+- [@harrydayexe](https://github.com/harrydayexe) for adding FFMPEG 7.1 support (issue [#7](https://github.com/aidandenlinger/SnapchatMemoriesCaptionAdder/issues/7) and [#14](https://github.com/aidandenlinger/SnapchatMemoriesCaptionAdder/issues/14))
 
 ## Contributing
 
