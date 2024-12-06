@@ -57,6 +57,16 @@ This project relies on two major libraries.
   [winget](https://learn.microsoft.com/en-us/windows/package-manager/winget/)
   with `winget install -e --id Gyan.FFmpeg` (package
   [here](https://winget.run/pkg/Gyan/FFmpeg)).
+    - Note: Ffmpeg must be version 7.1 or higher. FFmpeg 7 is *not* supported,
+      because the scale2ref filter is broken on that version but the scale filter
+      didn't yet support relative heights. [Ffmpeg 6 is not actively
+      supported, but here's the last commit that supported it if that
+      works for your
+      environment](https://github.com/aidandenlinger/SnapchatMemoriesCaptionAdder/releases/tag/ffmpeg-6).
+      If you're stuck on Ffmpeg 7 (Fedora 41 users, this is for you!), consider
+      using [distrobox](https://github.com/89luca89/distrobox/tree/main) to
+      spin up an arch linux container and run this script there. Sorry for the
+      headache, hopefully Fedora 42 will bump to 7.1!
 
 - [libvips](https://www.libvips.org/) is "a demand-driven, horizontally threaded
   image processing library. Compared to similar libraries, libvips runs quickly
