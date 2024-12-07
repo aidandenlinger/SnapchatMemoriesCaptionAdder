@@ -29,11 +29,12 @@ def _add_suffix(type: MediaType, path: Path) -> Path:
 
 
 def add_metadata(
-    memory_folder: Path,
+    memories_folder: Path,
     output_folder: Path,
     metadata: Metadata,
     tz: tzinfo = tzlocal(),
     ffmpeg_quiet: bool = True,
+    allow_overwriting : bool = False
 ) -> Optional[tuple[Path, Metadata, Optional[Popen]]]:
     """Given an input/output folder, the metadata for the memory, and
     optionally a timezone, add the overlay and timezone to the memory and write
@@ -44,7 +45,7 @@ def add_metadata(
     ffmpeg-python's async implementation is not asyncio"""
 
     # First, get/validate paths, then prepare for merging
-    root = memory_folder / (metadata.date.strftime("%Y-%m-%d_") + metadata.mid)
+    root = memories_folder / (metadata.date.strftime("%Y-%m-%d_") + metadata.mid)
 
     # From github issue #3, snapchat now adds the date before the mid.
     # We have the date, we can reconstruct this filename.
@@ -54,7 +55,7 @@ def add_metadata(
         new_format = base
 
         # Try the old format for backwards compatibility with my own backup
-        root = memory_folder / metadata.mid
+        root = memories_folder / metadata.mid
         base = _add_suffix(metadata.type, root.with_name(root.name + "-main"))
 
         # if it STILL doesn't exist, it's over
@@ -83,7 +84,8 @@ def add_metadata(
         output_folder / (metadata.date.strftime("%Y-%m-%d_%H_%M_") + metadata.mid),
     )
     logger.debug(f"output file: {output}")
-    assert not output.exists()
+    if not allow_overwriting:
+        assert not output.exists()
 
     # Delegate to libraries to add metadata to the output file
     match metadata.type:
