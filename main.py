@@ -34,9 +34,7 @@ def main():
 
     args.output_folder.mkdir()
 
-    with args.memories_history.open() as metadata:
-        parsed = parse_history(json.load(metadata)["Saved Media"])
-
+    parsed = parse_history(args.memories_history)
     files = []
 
     # You start a project hopeful, and this stayed clean until the end...
@@ -45,8 +43,10 @@ def main():
     # images and videos separately, and now main is complicated. Oh well...
 
     # Parse all the images in parallel
-    if (args.type_handled == MediaToHandle.ALL
-            or args.type_handled == MediaToHandle.IMAGE):
+    if (
+        args.type_handled == MediaToHandle.ALL
+        or args.type_handled == MediaToHandle.IMAGE
+    ):
         print("Handling images...")
 
         image_inputs = [img for img in parsed if img.type == MediaType.Image]
@@ -54,11 +54,12 @@ def main():
             image_inputs = image_inputs[:1]
 
         images = [
-            res for res in process_map(
-                partial(add_metadata, args.memories_folder,
-                        args.output_folder),
+            res
+            for res in process_map(
+                partial(add_metadata, args.memories_folder, args.output_folder),
                 image_inputs,
-            ) if res is not None
+            )
+            if res is not None
         ]
 
         # This is the only reason I return the metadata, so I can do the
@@ -67,13 +68,17 @@ def main():
         for path, metadata, _ in images:
             files.append((path, metadata))
 
-    if (args.type_handled == MediaToHandle.ALL
-            or args.type_handled == MediaToHandle.VIDEO):
+    if (
+        args.type_handled == MediaToHandle.ALL
+        or args.type_handled == MediaToHandle.VIDEO
+    ):
         processes = []
         num_of_cpus = cpu_count()
 
-        print("Handling videos... "
-              "(this will be slower than the pictures and will have hitches!)")
+        print(
+            "Handling videos... "
+            "(this will be slower than the pictures and will have hitches!)"
+        )
         video_inputs = [vid for vid in parsed if vid.type == MediaType.Video]
         if args.only_one:
             video_inputs = video_inputs[:1]
@@ -83,8 +88,7 @@ def main():
                 args.memories_folder,
                 args.output_folder,
                 metadata,
-                ffmpeg_quiet=args.verbose
-                != VerboseLevel.PROGRAM_AND_LIBRARIES,
+                ffmpeg_quiet=args.verbose != VerboseLevel.PROGRAM_AND_LIBRARIES,
             )
             if res is not None:
                 (path, metadata, process) = res

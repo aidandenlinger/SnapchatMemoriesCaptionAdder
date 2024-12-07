@@ -103,7 +103,9 @@ def add_metadata(
 def add_file_creation(output: Path, metadata: Metadata):
     """Change file created date to the original photo's date."""
     if not output.exists():
-        logger.warning(f"Expected a file {output}, but there is no such file! Skipping metadata...")
+        logger.warning(
+            f"Expected a file {output}, but there is no such file! Skipping metadata..."
+        )
         return
 
     # Set file creation time to memory's original creation time!

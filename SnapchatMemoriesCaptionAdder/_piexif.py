@@ -1,8 +1,8 @@
 import logging
-import piexif
-
 from fractions import Fraction
 from pathlib import Path
+
+import piexif
 
 from SnapchatMemoriesCaptionAdder.metadata import Metadata
 
@@ -46,7 +46,10 @@ def _dms_to_exif_format(dms_degrees, dms_minutes, dms_seconds):
     exif_format = (
         (dms_degrees, 1),
         (dms_minutes, 1),
-        (int(dms_seconds.limit_denominator(100).numerator), int(dms_seconds.limit_denominator(100).denominator))
+        (
+            int(dms_seconds.limit_denominator(100).numerator),
+            int(dms_seconds.limit_denominator(100).denominator),
+        ),
     )
     return exif_format
 
@@ -55,7 +58,9 @@ def piexif_add_photo_location(path: Path, metadata: Metadata):
     """Adds gps metadata (if any) to photo using pyexif."""
 
     if metadata.location.latitude == 0 and metadata.location.longitude == 0:
-        logger.debug(f"Skipping location data for {str(path.name)} because the latitude and longitude are 0.")
+        logger.debug(
+            f"Skipping location data for {str(path.name)} because the latitude and longitude are 0."
+        )
         return
 
     # converts the latitude and longitude coordinates to DMS
@@ -63,8 +68,12 @@ def piexif_add_photo_location(path: Path, metadata: Metadata):
     longitude_dms = _deg_to_dms(metadata.location.longitude, ["W", "E"])
 
     # convert the DMS values to EXIF values
-    exif_latitude = _dms_to_exif_format(latitude_dms[0], latitude_dms[1], latitude_dms[2])
-    exif_longitude = _dms_to_exif_format(longitude_dms[0], longitude_dms[1], longitude_dms[2])
+    exif_latitude = _dms_to_exif_format(
+        latitude_dms[0], latitude_dms[1], latitude_dms[2]
+    )
+    exif_longitude = _dms_to_exif_format(
+        longitude_dms[0], longitude_dms[1], longitude_dms[2]
+    )
 
     try:
         # Load existing EXIF data
@@ -77,11 +86,11 @@ def piexif_add_photo_location(path: Path, metadata: Metadata):
             piexif.GPSIFD.GPSLatitude: exif_latitude,
             piexif.GPSIFD.GPSLatitudeRef: latitude_dms[3],
             piexif.GPSIFD.GPSLongitude: exif_longitude,
-            piexif.GPSIFD.GPSLongitudeRef: longitude_dms[3]
+            piexif.GPSIFD.GPSLongitudeRef: longitude_dms[3],
         }
 
         # Update the EXIF data with the GPS information
-        exif_data['GPS'] = coordinates
+        exif_data["GPS"] = coordinates
 
         # Dump the updated EXIF data and insert it into the image
         exif_bytes = piexif.dump(exif_data)

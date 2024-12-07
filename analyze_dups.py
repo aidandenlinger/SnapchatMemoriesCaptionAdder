@@ -30,13 +30,12 @@ def main() -> None:
     # work if you have more than pairs of duplicates
     assert all(len(v) == 2 for v in dups.values())
 
-    with Path("duplicate_urls.csv").open(mode="w", newline='') as csvfile:
+    with Path("duplicate_urls.csv").open(mode="w", newline="") as csvfile:
         writer = csv.writer(csvfile)
-        writer.writerow(['MID', 'URL1', 'URL2'])
-        for (mid, [entry1, entry2]) in dups.items():
-            writer.writerow(
-                [mid, entry1["Download Link"], entry2["Download Link"]])
+        writer.writerow(["MID", "URL1", "URL2"])
+        for mid, [entry1, entry2] in dups.items():
+            writer.writerow([mid, entry1["Download Link"], entry2["Download Link"]])
 
 
 if __name__ == "__main__":
-    main() 
+    main()
