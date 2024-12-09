@@ -138,9 +138,6 @@ can also use the `-vv` flag to get logs from ffmpeg/vips.
 Some other flags:
 - `--image-only` will only convert images and not videos!
 - `--video-only` will only convert videos and not images!
-- `--only-one` will only convert one video and one image - useful for debugging
-  to see the log of only one conversion, or testing the script before running
-  it on your entire library.
 
 > [!WARNING]
 > If your captions are important to you, double check the final result against

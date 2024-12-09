@@ -49,8 +49,6 @@ def main():
         print("Handling images...")
 
         image_inputs = [img for img in parsed if img.type == MediaType.Image]
-        if args.only_one:
-            image_inputs = image_inputs[:1]
 
         images = [
             res
@@ -79,8 +77,6 @@ def main():
             "(this will be slower than the pictures and will have hitches!)"
         )
         video_inputs = [vid for vid in parsed if vid.type == MediaType.Video]
-        if args.only_one:
-            video_inputs = video_inputs[:1]
 
         for metadata in tqdm(video_inputs):
             res = add_metadata(

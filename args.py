@@ -26,7 +26,6 @@ class Args(NamedTuple):
     output_folder: Path
     verbose: VerboseLevel
     type_handled: MediaToHandle
-    only_one: bool
 
 
 def parse_args() -> Args:
@@ -57,11 +56,7 @@ def parse_args() -> Args:
         default=0,
         help="Output what the script is doing to help debug any issues. -v will get logs from just this application, -vv will also get logs from ffmpeg and vips libraries",
     )
-    parser.add_argument(
-        "--only-one",
-        action="store_true",
-        help="Only convert one file of each type, intended to make debugging easier",
-    )
+
     type_handled_group = parser.add_mutually_exclusive_group()
     type_handled_group.add_argument(
         "--image-only", help="Only process images", action="store_true"
@@ -118,5 +113,4 @@ def parse_args() -> Args:
         output_folder,
         verbose,
         type_handled,
-        args_raw.only_one,
     )
