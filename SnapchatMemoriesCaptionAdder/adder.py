@@ -34,7 +34,7 @@ def add_metadata(
     metadata: Metadata,
     tz: tzinfo = tzlocal(),
     ffmpeg_quiet: bool = True,
-    allow_overwriting : bool = False
+    allow_overwriting: bool = False,
 ) -> Optional[tuple[Path, Metadata, Optional[Popen]]]:
     """Given an input/output folder, the metadata for the memory, and
     optionally a timezone, add the overlay and timezone to the memory and write
@@ -95,7 +95,12 @@ def add_metadata(
             process = None
         case MediaType.Video:
             process = ffmpeg_add_metadata(
-                base, overlay, metadata, output, quiet=ffmpeg_quiet
+                base,
+                overlay,
+                metadata,
+                output,
+                quiet=ffmpeg_quiet,
+                allow_overwriting=allow_overwriting,
             )
 
     # sorry :(

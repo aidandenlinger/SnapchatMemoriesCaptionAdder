@@ -16,6 +16,7 @@ def ffmpeg_add_metadata(
     metadata: Metadata,
     output: Path,
     quiet: bool = True,
+    allow_overwriting: bool = False
 ) -> Optional[Popen]:
     """Use ffmpeg to add metadata to a video. Returns a Popen to the
     process running ffmpeg.
@@ -63,6 +64,8 @@ def ffmpeg_add_metadata(
             str(output),  # output file
             **metadata_dict,  # metadata hack
         )
+        if allow_overwriting:
+            output_node = output_node.overwrite_output()
         logger.debug(f"Compiled ffmpeg command: {" ".join(output_node.compile())}")
         process = output_node.run_async(quiet=quiet)
         return process
@@ -70,6 +73,8 @@ def ffmpeg_add_metadata(
         # Don't run async! We just copy the video/audio over, it's very quick.
         # Async on the large ones
         output_node = vid.output(str(output), codec="copy", **metadata_dict)
+        if allow_overwriting:
+            output_node = output_node.overwrite_output()
         logger.debug(f"Compiled ffmpeg command: {" ".join(output_node.compile())}")
         output_node.run(quiet=quiet)
         return None
