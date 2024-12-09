@@ -124,23 +124,29 @@ export into it.
     test/memories_history.json --memories-folder test/memories --output
     test_output`.
 
+Some other flags:
+- `--image-only` will only convert images and not videos!
+- `--video-only` will only convert videos and not images!
+
 With this folder prepared, you can now run `python main.py` to run the script!
 It will create a new folder called `output` that will hold all memories with
 timestamps and captions. (Note: this will create a new copy of each photo/video,
 so make sure you have enough space!) Alternatively, use the `--output` flag to
 provide a different location to dump the photos.
 
-If you run into issues, please run the script with the `-v` or `--verbose`
+If you run into issues, try running the tests to see if they produce the
+expected output. You can do this by running `just test` if you have
+[just] installed, or by running `python -m unittest tests/test.py`.
+The tests will have output files in `tests/output`, and there should be four.
+There should be an image with no caption, an image with a caption, a video
+with no caption, and a video with a caption. If there are issues with the
+images, check your VIPS installation, and if there are issues with the videos,
+check your ffmpeg installation.
+
+If there are still issues, please run the script with the `-v` or `--verbose`
 flag, which will output information on what the script is doing. If that
 doesn't help you with the issue, open a github issue with that output! You
 can also use the `-vv` flag to get logs from ffmpeg/vips.
-
-Some other flags:
-- `--image-only` will only convert images and not videos!
-- `--video-only` will only convert videos and not images!
-- `--only-one` will only convert one video and one image - useful for debugging
-  to see the log of only one conversion, or testing the script before running
-  it on your entire library.
 
 > [!WARNING]
 > If your captions are important to you, double check the final result against

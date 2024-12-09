@@ -1,6 +1,8 @@
+import json
 import logging
-from collections.abc import Collection, Mapping, Sequence
+from collections.abc import Set
 from datetime import datetime
+from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
 from dateutil.tz import UTC
@@ -10,42 +12,50 @@ from SnapchatMemoriesCaptionAdder.metadata import MID, Location, MediaType, Meta
 logger = logging.getLogger("__snap")
 
 
-def parse_history(
-        memory_history: Sequence[Mapping[str, str]]) -> Collection[Metadata]:
+def parse_history(memory_history: Path) -> Set[Metadata]:
     """Parse memory metadata into python objects."""
-    parsed: set[Metadata] = set()
+    with memory_history.open() as metadata:
+        memory_entries = json.load(metadata)["Saved Media"]
 
-    for entry in memory_history:
-        mid: MID = parse_qs(urlparse(entry["Download Link"]).query)["mid"][0]
-        # https://stackoverflow.com/a/63988322
-        # strptime won't parse the timezone. hardcode UTC in the format string
-        # to make sure there's a loud failure in case snapchat ever changes this
-        # timezone, then manually set timezone to UTC
-        date = datetime.strptime(entry["Date"],
-                                 "%Y-%m-%d %H:%M:%S UTC").replace(tzinfo=UTC)
-        type = MediaType(entry["Media Type"].lower())
-        [latitude, longitude] = [
-            float(numstr) for numstr in entry["Location"].removeprefix(
-                "Latitude, Longitude: ").split(", ")
-        ]
-        location = Location(latitude, longitude)
+        parsed: set[Metadata] = set()
 
-        data = Metadata(date, type, location, mid)
+        for entry in memory_entries:
+            mid: MID = parse_qs(urlparse(entry["Download Link"]).query)["mid"][0]
+            # https://stackoverflow.com/a/63988322
+            # strptime won't parse the timezone. hardcode UTC in the format string
+            # to make sure there's a loud failure in case snapchat ever changes this
+            # timezone, then manually set timezone to UTC
+            date = datetime.strptime(entry["Date"], "%Y-%m-%d %H:%M:%S UTC").replace(
+                tzinfo=UTC
+            )
+            type = MediaType(entry["Media Type"].lower())
+            [latitude, longitude] = [
+                float(numstr)
+                for numstr in entry["Location"]
+                .removeprefix("Latitude, Longitude: ")
+                .split(", ")
+            ]
+            location = Location(latitude, longitude)
 
-        # memories_history.json seems to have duplicate entries. Their URLs
-        # differ (there's a different sid and sig in the url, whatever that is)
-        # but all of the data *we* parse with the same MID seem to have the same
-        # data. If someone *does* have an issue it should be loud
-        if mid in {p.mid for p in parsed}:
-            if data not in parsed:
-                logger.warning(f"Duplicate MID with different data: {mid} and "
-                               f"{[p for p in parsed if p.mid == mid]}")
-            else:
-                logger.info(
-                    f"{mid} has duplicates in memories_history.json but has "
-                    "same data, continuing...")
-                continue
+            data = Metadata(date, type, location, mid)
 
-        parsed.add(Metadata(date, type, location, mid))
+            # memories_history.json seems to have duplicate entries. Their URLs
+            # differ (there's a different sid and sig in the url, whatever that is)
+            # but all of the data *we* parse with the same MID seem to have the same
+            # data. If someone *does* have an issue it should be loud
+            if mid in {p.mid for p in parsed}:
+                if data not in parsed:
+                    logger.warning(
+                        f"Duplicate MID with different data: {mid} and "
+                        f"{[p for p in parsed if p.mid == mid]}"
+                    )
+                else:
+                    logger.info(
+                        f"{mid} has duplicates in memories_history.json but has "
+                        "same data, continuing..."
+                    )
+                    continue
 
-    return parsed
+            parsed.add(Metadata(date, type, location, mid))
+
+        return parsed

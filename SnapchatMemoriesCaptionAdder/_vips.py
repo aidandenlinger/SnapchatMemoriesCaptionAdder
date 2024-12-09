@@ -6,8 +6,9 @@ from pyvips import GValue, Image
 from SnapchatMemoriesCaptionAdder.metadata import MediaType, Metadata
 
 
-def vips_add_metadata(base: Path, overlay: Optional[Path], metadata: Metadata,
-                      output: Path):
+def vips_add_metadata(
+    base: Path, overlay: Optional[Path], metadata: Metadata, output: Path
+):
     """Use the VIPS image library to add metadata to an image.
 
     NOTE: Only works on images, does not work on video!"""

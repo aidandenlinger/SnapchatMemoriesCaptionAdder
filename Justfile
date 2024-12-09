@@ -1,3 +1,14 @@
 test:
-	rm -rf test_output
-	python main.py --memories-history test/memories_history.json --memories-folder test/memories --output test_output
+	python -m unittest tests/test.py
+
+test_image_no_caption:
+	python -m unittest tests.test.TestConversion.test_image_no_caption
+
+test_image_caption:
+	python -m unittest tests.test.TestConversion.test_image_caption
+
+test_video_no_caption:
+	python -m unittest tests.test.TestConversion.test_video_no_caption
+
+test_video_caption:
+	python -m unittest tests.test.TestConversion.test_video_caption
