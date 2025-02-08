@@ -26,6 +26,7 @@ class Args(NamedTuple):
     output_folder: Path
     verbose: VerboseLevel
     type_handled: MediaToHandle
+    run_async: bool
 
 
 def parse_args() -> Args:
@@ -63,6 +64,12 @@ def parse_args() -> Args:
     )
     type_handled_group.add_argument(
         "--video-only", help="Only process videos", action="store_true"
+    )
+
+    parser.add_argument(
+        "--video-async",
+        help="[EXPERIMENTAL] Convert several videos at once for a faster overall conversion.",
+        action="store_true"
     )
 
     args_raw = parser.parse_args()
@@ -113,4 +120,5 @@ def parse_args() -> Args:
         output_folder,
         verbose,
         type_handled,
+        args_raw.video_async
     )
