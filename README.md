@@ -14,7 +14,7 @@ metadata (date/time/location) and the captions are stored separately!
 
 | Base Image | Overlay Image |
 | ---------- | ------------- |
-| ![Base image with no caption](test/memories/062c8942-3124-a480-71fc-3c4833e3e569-main.jpg) | ![Overlay image with no image](test/memories/062c8942-3124-a480-71fc-3c4833e3e569-overlay.png) |
+| ![Base image with no caption](tests/memories/2020-01-02_062c8942-3124-a480-71fc-3c4833e3e56a-main.jpg) | ![Overlay image with no image](tests/memories/2020-01-02_062c8942-3124-a480-71fc-3c4833e3e56a-overlay.png) |
 
 Alternate projects like [ToTheMax's
 Snapchat-All-Memories-Downloader](https://github.com/ToTheMax/Snapchat-All-Memories-Downloader),
