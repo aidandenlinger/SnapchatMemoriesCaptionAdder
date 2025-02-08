@@ -26,6 +26,7 @@ class Args(NamedTuple):
     output_folder: Path
     verbose: VerboseLevel
     type_handled: MediaToHandle
+    run_async: bool
 
 
 def parse_args() -> Args:
@@ -40,15 +41,20 @@ def parse_args() -> Args:
     )
     parser.add_argument(
         "--memories-history",
-        dest="memories_history",
+        help=f"Where the memories_history.json file is. Defaults to {default_memories_history}",
         default=str(default_memories_history),
     )
     parser.add_argument(
         "--memories-folder",
-        dest="memories_folder",
+        help=f"Where the memories folder is. Defaults to {default_memories_folder}",
         default=str(default_memories_folder),
     )
-    parser.add_argument("--output", default=str(default_output_folder))
+    parser.add_argument(
+        "--output",
+        help=f"A folder for the converted memories to go. Defaults to {default_output_folder}",
+        default=str(default_output_folder),
+    )
+
     parser.add_argument(
         "--verbose",
         "-v",
@@ -65,12 +71,18 @@ def parse_args() -> Args:
         "--video-only", help="Only process videos", action="store_true"
     )
 
+    parser.add_argument(
+        "--video-async",
+        help="[EXPERIMENTAL] Convert several videos at once for a faster overall conversion.",
+        action="store_true",
+    )
+
     args_raw = parser.parse_args()
 
     memories_history = Path(args_raw.memories_history)
     if not memories_history.is_file():
         raise Exception(
-            f"{memories_history} is not a file! Please place it in the "
+            f"{memories_history} is set as memories_history.json, but it isn't a file! Please place it in the "
             f"default location ({default_memories_history}) or specify the "
             "path with the --memories-history flag."
         )
@@ -78,7 +90,7 @@ def parse_args() -> Args:
     memories_folder = Path(args_raw.memories_folder)
     if not memories_folder.is_dir():
         raise Exception(
-            f"{memories_folder} is not a directory! Please place the memories "
+            f"{memories_folder} is set as the memories folder, but it isn't a folder! Please place the memories "
             f"folder in the default location ({default_memories_folder}) or "
             "specify the path with the --memories-folder flag."
         )
@@ -87,7 +99,7 @@ def parse_args() -> Args:
     if output_folder.exists():
         raise Exception(
             f"{output_folder} already exists, but is set to be the output "
-            "folder! Stopping the script since it may contain exported photos. "
+            "folder! Stopping the script to not delete any exported photos. "
             "Please delete this directory if you intend to use it as the "
             "output folder."
         )
@@ -113,4 +125,5 @@ def parse_args() -> Args:
         output_folder,
         verbose,
         type_handled,
+        args_raw.video_async,
     )

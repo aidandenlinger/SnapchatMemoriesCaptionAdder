@@ -84,6 +84,7 @@ def main():
                 args.output_folder,
                 metadata,
                 ffmpeg_quiet=args.verbose != VerboseLevel.PROGRAM_AND_LIBRARIES,
+                ffmpeg_async=args.run_async
             )
             if res is not None:
                 (path, metadata, process) = res

@@ -34,6 +34,7 @@ def add_metadata(
     metadata: Metadata,
     tz: tzinfo = tzlocal(),
     ffmpeg_quiet: bool = True,
+    ffmpeg_async: bool = False,
     allow_overwriting: bool = False,
 ) -> Optional[tuple[Path, Metadata, Optional[Popen]]]:
     """Given an input/output folder, the metadata for the memory, and
@@ -99,6 +100,7 @@ def add_metadata(
                 overlay,
                 metadata,
                 output,
+                run_async=ffmpeg_async,
                 quiet=ffmpeg_quiet,
                 allow_overwriting=allow_overwriting,
             )
