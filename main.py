@@ -77,15 +77,21 @@ def main():
             "(this will be slower than the pictures and will have hitches!)"
         )
         video_inputs = [vid for vid in parsed if vid.type == MediaType.Video]
+        video_failures = []
 
         for metadata in tqdm(video_inputs):
-            res = add_metadata(
-                args.memories_folder,
-                args.output_folder,
-                metadata,
-                ffmpeg_quiet=args.verbose != VerboseLevel.PROGRAM_AND_LIBRARIES,
-                ffmpeg_async=args.run_async
-            )
+            try:
+                res = add_metadata(
+                    args.memories_folder,
+                    args.output_folder,
+                    metadata,
+                    ffmpeg_quiet=args.verbose != VerboseLevel.PROGRAM_AND_LIBRARIES,
+                    ffmpeg_async=args.run_async,
+                )
+            except Exception:
+                video_failures.append(metadata)
+                continue
+
             if res is not None:
                 (path, metadata, process) = res
 
@@ -114,6 +120,11 @@ def main():
         add_file_creation(path, metadata)
 
     print("Done!")
+    if len(video_failures) != 0:
+        print("Some videos failed to convert:")
+        for vid in video_failures:
+            print(vid.mid + ".mp4")
+        print("Please try running the command with the `-vv` flag to see why this video failed to convert. Submit a Github issue with the output if you don't know why it failed to convert.")
 
 
 if __name__ == "__main__":
