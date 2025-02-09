@@ -78,7 +78,7 @@ def ffmpeg_add_metadata(
                 output_node.run(quiet=quiet)
                 return None
         except ffmpeg.Error as err:
-            logger.error(f"ffmpeg error converting {base} with {overlay=}: {err=}")
+            logger.error(f"ffmpeg error converting {base.name} with overlay {overlay.name if overlay is not None else None}: {err=}")
             raise Exception(err)
     else:
         # Don't run async! We just copy the video/audio over, it's very quick.
