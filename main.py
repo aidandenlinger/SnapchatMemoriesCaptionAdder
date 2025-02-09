@@ -121,10 +121,8 @@ def main():
 
     print("Done!")
     if len(video_failures) != 0:
-        print("Some videos failed to convert:")
-        for vid in video_failures:
-            print(vid.mid)
-        print("Please try running the command with the `-vv` flag to see why this video failed to convert. Submit a Github issue with the output if you don't know why it failed to convert.")
+        print("Some videos failed to convert. See the error logs above.")
+        print("Please try running the command with the `-vv` flag to see why these videos failed to convert. Submit a Github issue with the output if you don't know why it failed to convert.")
 
 
 if __name__ == "__main__":
