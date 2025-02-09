@@ -108,9 +108,10 @@ def main():
                 processes = [p for p in processes if p.poll() is None]
 
         # Wait on the final processes
-        print("Waiting for final videos...")
-        for process in tqdm(processes):
-            process.wait()
+        if len(processes) != 0:
+            print("Waiting for final videos...")
+            for process in tqdm(processes):
+                process.wait()
 
     # Okay, and now with all the files we can change their modification dates.
     # We used to do this in add_metadata! But since ffmpeg runs async now, the
