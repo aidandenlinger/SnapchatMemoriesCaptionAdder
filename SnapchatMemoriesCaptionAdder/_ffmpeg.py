@@ -17,10 +17,12 @@ def ffmpeg_add_metadata(
     output: Path,
     run_async: bool = False,
     quiet: bool = True,
-    allow_overwriting: bool = False
+    allow_overwriting: bool = False,
 ) -> Optional[Popen]:
     """Use ffmpeg to add metadata to a video. Returns a Popen to the
     process running ffmpeg.
+
+    Raises an exception if ffmpeg fails to convert the video.
 
     NOTE: Only works on videos, does not work on images!"""
     assert metadata.type == MediaType.Video
@@ -68,12 +70,16 @@ def ffmpeg_add_metadata(
         if allow_overwriting:
             output_node = output_node.overwrite_output()
         logger.debug(f"Compiled ffmpeg command: {" ".join(output_node.compile())}")
-        if run_async:
-            process = output_node.run_async(quiet=quiet)
-            return process
-        else:
-           output_node.run(quiet=quiet)
-           return None 
+        try:
+            if run_async:
+                process = output_node.run_async(quiet=quiet)
+                return process
+            else:
+                output_node.run(quiet=quiet)
+                return None
+        except ffmpeg.Error as err:
+            logger.error(f"ffmpeg error converting {base} with {overlay=}: {err=}")
+            raise Exception(err)
     else:
         # Don't run async! We just copy the video/audio over, it's very quick.
         # Async on the large ones

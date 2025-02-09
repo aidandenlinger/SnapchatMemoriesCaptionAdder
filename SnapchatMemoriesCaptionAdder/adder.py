@@ -43,7 +43,9 @@ def add_metadata(
 
     Returns the created file, the handed in metadata because I'm too lazy to do
     this right, and if this was a video, the process running ffmpeg because
-    ffmpeg-python's async implementation is not asyncio"""
+    ffmpeg-python's async implementation is not asyncio
+
+    Raises an exception if ffmpeg fails to convert the video."""
 
     # First, get/validate paths, then prepare for merging
     root = memories_folder / (metadata.date.strftime("%Y-%m-%d_") + metadata.mid)
