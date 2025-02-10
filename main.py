@@ -77,15 +77,21 @@ def main():
             "(this will be slower than the pictures and will have hitches!)"
         )
         video_inputs = [vid for vid in parsed if vid.type == MediaType.Video]
+        video_failures = []
 
         for metadata in tqdm(video_inputs):
-            res = add_metadata(
-                args.memories_folder,
-                args.output_folder,
-                metadata,
-                ffmpeg_quiet=args.verbose != VerboseLevel.PROGRAM_AND_LIBRARIES,
-                ffmpeg_async=args.run_async
-            )
+            try:
+                res = add_metadata(
+                    args.memories_folder,
+                    args.output_folder,
+                    metadata,
+                    ffmpeg_quiet=args.verbose != VerboseLevel.PROGRAM_AND_LIBRARIES,
+                    ffmpeg_async=args.run_async,
+                )
+            except Exception:
+                video_failures.append(metadata)
+                continue
+
             if res is not None:
                 (path, metadata, process) = res
 
@@ -102,9 +108,10 @@ def main():
                 processes = [p for p in processes if p.poll() is None]
 
         # Wait on the final processes
-        print("Waiting for final videos...")
-        for process in tqdm(processes):
-            process.wait()
+        if len(processes) != 0:
+            print("Waiting for final videos...")
+            for process in tqdm(processes):
+                process.wait()
 
     # Okay, and now with all the files we can change their modification dates.
     # We used to do this in add_metadata! But since ffmpeg runs async now, the
@@ -114,6 +121,9 @@ def main():
         add_file_creation(path, metadata)
 
     print("Done!")
+    if len(video_failures) != 0:
+        print("Some videos failed to convert. See the error logs above.")
+        print("Please try running the command with the `-vv` flag to see why these videos failed to convert. Submit a Github issue with the output if you don't know why it failed to convert.")
 
 
 if __name__ == "__main__":
