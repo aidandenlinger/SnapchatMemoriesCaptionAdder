@@ -2,7 +2,7 @@
 
 ![Overview](doc/overview.webp)
 
-Adds metadata (captions and timestamps) to your exported Snapchat memories.
+Adds metadata (captions, timestamps and location) to your exported Snapchat memories.
 
 ## Background
 Snapchat allows you to save images/videos to their servers with their memories
