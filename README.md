@@ -1,3 +1,13 @@
+> [!CAUTION]
+> Snapchat has changed how exports work. This program has not been updated to work with their new
+> format. As a result, **the script does not work at all right now**. I'm open to any PRs that
+> update the script to work with the new format! Otherwise, I do plan on fixing it when I have more
+> time, but that won't be soon. See
+> [#25](https://github.com/aidandenlinger/SnapchatMemoriesCaptionAdder/issues/25#issuecomment-3528416836)
+> for more info.
+
+---
+
 # SnapchatMemoriesCaptionAdder
 
 ![Overview](doc/overview.webp)
@@ -44,24 +54,14 @@ project combines them into one photo, like Snapchat does. The final result:
 ### Getting Your Snapchat Data
 
 First, we need to get our Snapchat data. [Follow Snapchat's instructions to download your
-data](https://help.snapchat.com/hc/en-us/articles/7012305371156). You'll need to
-do two separate exports:
+data](https://help.snapchat.com/hc/en-us/articles/7012305371156).
 
-- Check "Include your Memories, Chat Media and Shared Stories" to download all
-  your memories. (Note: this may take up a significant amount of space!) The
-  status of the other checkmarks shouldn't matter, so feel free to export any
-  additional data you'd like. Make sure the date range includes everything you
-  want to export! If you choose to download multiple data packages, merge all
-  the `memories` folders into one `memories` folder. This is the only folder you
-  need from the export for this script.
-  
-- Create a second export, *without* "Include your Memories, Chat Media and
-  Shared Stories" checked, and *with* "Export JSON files" and "Memories and
-  Other Media" checked. Use the same date range as your first export. This
-  export should take much less time for Snapchat to send to you :) In this
-  data export, make sure you have a `json/memories_history.json`. This is the
-  metadata for the memories, which is only generated when you *don't* export
-  your memories.
+> [!Note]
+> The "Memories-Only" export doesn't work, because this script specifically needs
+> JSON output, which isn't included in that export. Please ignore the "Request Only Memories" button.
+
+Check "Export your Memories" **and** "Export JSON Files". In this data export, make sure you have a
+`json/memories_history.json`, which is the file this script needs.
 
 ### Dependencies
 
@@ -80,10 +80,10 @@ captions onto videos.
 - Windows: Install it from
   [winget](https://learn.microsoft.com/en-us/windows/package-manager/winget/)
   with `winget install -e --id Gyan.FFmpeg` (package
-  [here](https://winget.run/pkg/Gyan/FFmpeg)).  
+  [here](https://winget.run/pkg/Gyan/FFmpeg)).
 
 - MacOS:  install `ffmpeg` from [brew](https://formulae.brew.sh/formula/ffmpeg).
-  
+
 - Linux: download `ffmpeg` from your package manager.
 
 > [!NOTE]
@@ -100,7 +100,7 @@ captions onto videos.
 image processing library. Compared to similar libraries, libvips runs quickly
 and uses little memory." This project uses it to overlay the captions onto
 images.
-  
+
 - Windows:  [download a compiled version
 here](https://www.libvips.org/install.html#installing-the-windows-binary) and
 [add the bin folder to your
