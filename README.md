@@ -1,10 +1,15 @@
 > [!CAUTION]
 > Snapchat has changed how exports work. This program has not been updated to work with their new
-> format. As a result, **the script does not work at all right now**. I'm open to any PRs that
-> update the script to work with the new format! Otherwise, I do plan on fixing it when I have more
-> time, but that won't be soon. See
+> format. As a result, **the script does not work at all right now**. See
 > [#25](https://github.com/aidandenlinger/SnapchatMemoriesCaptionAdder/issues/25#issuecomment-3528416836)
 > for more info.
+>
+> I don't have a desire to work on this script anymore, it solved my needs a long time ago,
+> and it's difficult to want to test and fix it when Snapchat could change things at any point.
+> Please feel free to fork this repo and make it work! Mention me if you do and
+> I'd be happy to add a link to your repository here.
+> From my understanding, the best alternative to this repo is <https://github.com/ToTheMax/Snapchat-All-Memories-Downloader>,
+> which has in-progress work on adding overlays.
 
 ---
 
